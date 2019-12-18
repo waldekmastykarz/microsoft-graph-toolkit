@@ -7,6 +7,7 @@
 
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import { customElement, html, property, TemplateResult } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat';
 import { Providers } from '../../Providers';
 import { ProviderState } from '../../providers/IProvider';
 import { getEmailFromGraphEntity } from '../../utils/GraphHelpers';
@@ -84,6 +85,9 @@ export class MgtPersonCard extends MgtTemplatedComponent {
   })
   public inheritDetails: boolean = false;
 
+  @property({})
+  public profileInfo: any[];
+
   /**
    * Synchronizes property values when attributes change.
    *
@@ -110,8 +114,12 @@ export class MgtPersonCard extends MgtTemplatedComponent {
    * * @param _changedProperties Map of changed properties with old values
    */
   public firstUpdated() {
-    Providers.onProviderUpdated(() => this.loadData());
+    Providers.onProviderUpdated(() => {
+      this.loadData();
+      this.loadProfileInformation();
+    });
     this.loadData();
+    this.loadProfileInformation();
   }
 
   /**
@@ -203,6 +211,11 @@ export class MgtPersonCard extends MgtTemplatedComponent {
     }
   }
 
+  private async loadProfileInformation() {
+    const provider = Providers.globalProvider;
+    this.profileInfo = await provider.graph.getMyProfile();
+  }
+
   private renderAdditionalDetails() {
     if (this.isExpanded === true) {
       const user = this.personDetails;
@@ -211,6 +224,28 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       let email: TemplateResult;
       let location: TemplateResult;
       let chat: TemplateResult;
+
+      let profileData: TemplateResult;
+
+      const simpData = [];
+
+      console.log('profileInfo', this.profileInfo);
+
+      for (const key in this.profileInfo) {
+        simpData.push(key);
+      }
+
+      profileData = html`
+        ${repeat(
+          simpData,
+          data => data,
+          data => html`
+            <ul>
+              <li>${data}</li>
+            </ul>
+          `
+        )}
+      `;
 
       if ((user as MicrosoftGraph.User).businessPhones && (user as MicrosoftGraph.User).businessPhones.length > 0) {
         phone = html`
@@ -267,6 +302,12 @@ export class MgtPersonCard extends MgtTemplatedComponent {
                     </div>
                   `
                 : null}
+            </div>
+          </div>
+          <div>
+            <p>Profile Data:</p>
+            <div>
+              ${profileData}
             </div>
           </div>
         </div>

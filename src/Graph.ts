@@ -79,6 +79,19 @@ export class Graph {
   }
 
   /**
+   * async promise, returns all Graph profile data for user.
+   *
+   * @returns {Promise<any>}
+   * @memberof Graph
+   */
+  public async getMyProfile(): Promise<any> {
+    return this.client
+      .api('/me/profile')
+      .version('beta')
+      .get();
+  }
+
+  /**
    * async promise, returns all Graph users associated with the userPrincipleName provided
    *
    * @param {string} userPrincipleName
