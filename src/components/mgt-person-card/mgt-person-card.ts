@@ -229,19 +229,44 @@ export class MgtPersonCard extends MgtTemplatedComponent {
 
       const simpData = [];
 
-      console.log('profileInfo', this.profileInfo);
-
       for (const key in this.profileInfo) {
-        simpData.push(key);
+        if (key.indexOf('@') === -1) {
+          if (this.profileInfo[key]) {
+            if (this.profileInfo[key].length > 0) {
+              simpData.push([key, this.profileInfo[key]]);
+            } else {
+              simpData.push([key, 'no data for this user found']);
+            }
+          }
+        }
       }
+
+      console.log(simpData);
 
       profileData = html`
         ${repeat(
           simpData,
           data => data,
           data => html`
-            <ul>
-              <li>${data}</li>
+            <ul style="max-width: 340px;">
+              <li style="text-decoration: underline;">${data[0]}</li>
+              <small><b>Categories available:</b>  ${
+                typeof data[1] === 'string' ? data[1] : Object.keys(data[1][0]) + ''
+              }<small>
+              <div></div>
+              <b>Data:</b>
+              <small>${data[1][0].endMonthYear ? 'endMonthYear : ' + data[1][0].endMonthYear : null}</small>
+              <div></div>
+              <small>${data[1][0].startMonthYear ? 'startMonthYear : ' + data[1][0].StartMonthYear : null}</small>
+              <div></div>
+              <small>${
+                data[1][0].completionMonthYear ? 'completionMonthYear : ' + data[1][0].displayName : null
+              }</small>
+              <div></div>
+              <small>${data[1][0].displayName ? 'displayName : ' + data[1][0].displayName : null}</small>
+              <div></div>
+              <small>${data[1][0].detail ? 'detail : ' + data[1][0].displayName : null}</small>
+              <div></div>
             </ul>
           `
         )}
