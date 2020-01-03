@@ -255,18 +255,88 @@ export class MgtPersonCard extends MgtTemplatedComponent {
               }<small>
               <div></div>
               <b>Data:</b>
+              <small>${data[1][0].categories ? 'categories : ' + data[1][0].categories : null}</small>
+              <div></div>
+              <small>${data[1][0].description ? 'description : ' + data[1][0].description : null}</small>
+              <div></div>
               <small>${data[1][0].endMonthYear ? 'endMonthYear : ' + data[1][0].endMonthYear : null}</small>
               <div></div>
               <small>${data[1][0].startMonthYear ? 'startMonthYear : ' + data[1][0].StartMonthYear : null}</small>
               <div></div>
+              <div></div>
+              <small>${data[1][0].inference ? 'inference : ' + data[1][0].inference : null}</small>
+              <div></div>
               <small>${
                 data[1][0].completionMonthYear ? 'completionMonthYear : ' + data[1][0].displayName : null
               }</small>
+              <small>${data[1][0].id ? 'id : ' + data[1][0].id : null}</small>
+              <div></div>
+              <small>${data[1][0].program ? 'program.abbreviation :  ' + data[1][0].abbeviation : null}</small>
+              <div></div>
+              <small>${data[1][0].program ? ' program.displayName : ' + data[1][0].program.displayName : null}</small>
+              <div></div>
+              <small>${data[1][0].program ? ' program.grade : ' + data[1][0].program.grade : null}</small>
+              <div></div>
+              <small>${
+                data[1][0].program ? ' program.institution : ' + data[1][0].institution.displayName : null
+              }</small>
+              <div></div>
               <div></div>
               <small>${data[1][0].displayName ? 'displayName : ' + data[1][0].displayName : null}</small>
               <div></div>
-              <small>${data[1][0].detail ? 'detail : ' + data[1][0].displayName : null}</small>
+              <small>${data[1][0].detail ? 'detail.description : ' + data[1][0].detail.description : null}</small>
+              <small>${
+                data[1][0].detail ? ' detail.jobtitle(startmY & endmY) : ' + data[1][0].detail.jobTitle : null
+              }</small>
               <div></div>
+              <small>${
+                data[1][0].detail ? ' detail.company.displayName : ' + data[1][0].detail.company.displayName : null
+              }</small>
+              <div></div>
+              <small>${
+                data[1][0].detail ? ' detail.company.department : ' + data[1][0].detail.company.department : null
+              }</small>
+              <div></div>
+              <small>${
+                data[1][0].detail
+                  ? ' detail.company.officeLocation : ' + data[1][0].detail.company.officeLocation
+                  : null
+              }</small>
+              <div></div>
+                <small>${
+                  data[1][0].detail
+                    ? ' detail.company.officeLocation.address : ' + data[1][0].detail.company.address.street
+                    : null
+                }</small>
+              <div></div>
+
+              <div></div>
+              <small>${data[1][0].startMonthYear ? 'startMonthYear : ' + data[1][0].StartMonthYear : null}</small>
+              <div></div>
+              <div></div>
+              <small>${data[1][0].address ? ' address : ' + data[1][0].address : null}</small>
+              <div></div>
+              <small>${data[1][0].type ? ' address(type) : ' + data[1][0].type : null}</small>
+              <div></div>
+              <small>${data[1][0].tag ? ' tag : ' + data[1][0].tag : null}</small>
+              <div></div>
+              <small>${data[1][0].proficiency ? ' proficiency : ' + data[1][0].proficiency : null}</small>
+              <div></div>
+              <small>${data[1][0].languageTag ? ' languageTag : ' + data[1][0].languageTag : null}</small>
+              <div></div>
+              <small>${data[1][0].intials ? ' initials : ' + data[1][0].initials : null}</small>
+              <div></div>
+              <small>${data[1][0].nickname ? ' nickname : ' + data[1][0].nickname : null}</small>
+              <div></div>
+              <small>${data[1][0].pronounciation ? ' pronounciation : ' + data[1][0].prononciation : null}</small>
+              <div></div>
+              <small>${data[1][0].number ? ' number : ' + data[1][0].number : null}</small>
+              <div></div>
+              <small>${data[1][0].client ? ' client : ' + data[1][0].client : null}</small>
+              <div></div>
+              <small>${data[1][0].colleagues ? ' colleagues : ' + data[1][0].colleagues : null}</small>
+              <div></div>
+              <small>${data[1][0].sponsors ? ' sponsors : ' + data[1][0].sponsors : null}</small>
             </ul>
           `
         )}
