@@ -14,6 +14,7 @@ import { styles } from './mgt-agenda-css';
 
 import '../../styles/fabric-icon-font';
 import { prepScopes } from '../../utils/GraphHelpers';
+import { getDayOfWeekString, getMonthString } from '../../utils/Utils';
 import '../mgt-person/mgt-person';
 import { MgtTemplatedComponent } from '../templatedComponent';
 
@@ -205,6 +206,7 @@ export class MgtAgenda extends MgtTemplatedComponent {
     const p = Providers.globalProvider;
     if (p && p.state === ProviderState.SignedIn) {
       this._loading = true;
+      const graph = p.graph.forComponent(this);
 
       if (this.eventQuery) {
         try {
@@ -218,7 +220,7 @@ export class MgtAgenda extends MgtTemplatedComponent {
             query = this.eventQuery;
           }
 
-          let request = await p.graph.client.api(query);
+          let request = await graph.api(query);
 
           if (scope) {
             request = request.middlewareOptions(prepScopes(scope));
@@ -237,7 +239,7 @@ export class MgtAgenda extends MgtTemplatedComponent {
         const end = new Date(start.getTime());
         end.setDate(start.getDate() + this.days);
         try {
-          this.events = await p.graph.getEvents(start, end, this.groupId);
+          this.events = await graph.getEvents(start, end, this.groupId);
         } catch (error) {
           // noop - possible error with graph
         }
@@ -255,7 +257,7 @@ export class MgtAgenda extends MgtTemplatedComponent {
       return this.renderTemplate('loading', null) || this.renderLoading();
     }
 
-    if (this.events) {
+    if (this.events && this.events.length) {
       const events = this.showMax && this.showMax > 0 ? this.events.slice(0, this.showMax) : this.events;
 
       const renderedTemplate = this.renderTemplate('default', { events });
@@ -302,7 +304,7 @@ export class MgtAgenda extends MgtTemplatedComponent {
         ${events.map(
           event =>
             html`
-              <li>
+              <li @click=${() => this.eventClicked(event)}>
                 ${this.renderTemplate('event', { event }, event.id) || this.renderEvent(event)}
               </li>
             `
@@ -399,6 +401,10 @@ export class MgtAgenda extends MgtTemplatedComponent {
     `;
   }
 
+  private eventClicked(event: MicrosoftGraph.Event) {
+    this.fireCustomEvent('eventClick', { event });
+  }
+
   private getEventTimeString(event: MicrosoftGraph.Event) {
     if (event.isAllDay) {
       return 'ALL DAY';
@@ -424,29 +430,13 @@ export class MgtAgenda extends MgtTemplatedComponent {
   private getDateHeaderFromDateTimeString(dateTimeString: string) {
     const date = new Date(dateTimeString);
     date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     const dayIndex = date.getDay();
     const monthIndex = date.getMonth();
     const day = date.getDate();
     const year = date.getFullYear();
 
-    return `${dayNames[dayIndex]}, ${monthNames[monthIndex]} ${day}, ${year}`;
+    return `${getDayOfWeekString(dayIndex)}, ${getMonthString(monthIndex)} ${day}, ${year}`;
   }
 
   private getEventDuration(event: MicrosoftGraph.Event) {

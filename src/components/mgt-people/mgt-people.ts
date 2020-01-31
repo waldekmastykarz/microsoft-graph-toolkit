@@ -11,8 +11,8 @@ import { Providers } from '../../Providers';
 import { ProviderState } from '../../providers/IProvider';
 import '../../styles/fabric-icon-font';
 import '../mgt-person/mgt-person';
-import { PersonCardInteraction } from '../mgt-person/mgt-person';
 import { MgtTemplatedComponent } from '../templatedComponent';
+import { PersonCardInteraction } from './../PersonCardInteraction';
 import { styles } from './mgt-people-css';
 
 /**
@@ -62,6 +62,39 @@ export class MgtPeople extends MgtTemplatedComponent {
   })
   public groupId: string;
 
+  /**
+   * user id array
+   *
+   * @memberof MgtPeople
+   */
+  @property({
+    attribute: 'user-ids',
+    converter: (value, type) => {
+      return value.split(',');
+    }
+  })
+  public userIds: string[];
+
+  /**
+   * Sets how the person-card is invoked
+   * Set to PersonCardInteraction.none to not show the card
+   *
+   * @type {PersonCardInteraction}
+   * @memberof MgtPerson
+   */
+  @property({
+    attribute: 'person-card',
+    converter: (value, type) => {
+      value = value.toLowerCase();
+      if (typeof PersonCardInteraction[value] === 'undefined') {
+        return PersonCardInteraction.hover;
+      } else {
+        return PersonCardInteraction[value];
+      }
+    }
+  })
+  public personCardInteraction: PersonCardInteraction = PersonCardInteraction.hover;
+
   private _firstUpdated = false;
 
   /**
@@ -86,7 +119,7 @@ export class MgtPeople extends MgtTemplatedComponent {
    */
 
   protected render() {
-    if (this.people) {
+    if (this.people && this.people.length) {
       return (
         this.renderTemplate('default', { people: this.people }) ||
         html`
@@ -106,8 +139,8 @@ export class MgtPeople extends MgtTemplatedComponent {
                   people: this.people
                 }) ||
                 html`
-                  <li>+${this.people.length - this.showMax}</li>
-                `
+                    <li class="overflow"><span>+${this.people.length - this.showMax}<span></li>
+                  `
               : null}
           </ul>
         `
@@ -126,12 +159,18 @@ export class MgtPeople extends MgtTemplatedComponent {
       const provider = Providers.globalProvider;
 
       if (provider && provider.state === ProviderState.SignedIn) {
-        const client = Providers.globalProvider.graph;
+        const graph = provider.graph.forComponent(this);
 
         if (this.groupId) {
-          this.people = await client.getPeopleFromGroup(this.groupId);
+          this.people = await graph.getPeopleFromGroup(this.groupId);
+        } else if (this.userIds) {
+          this.people = await Promise.all(
+            this.userIds.map(async userId => {
+              return await graph.getUser(userId);
+            })
+          );
         } else {
-          this.people = await client.getPeople();
+          this.people = await graph.getPeople();
         }
       }
     }
@@ -144,7 +183,7 @@ export class MgtPeople extends MgtTemplatedComponent {
       <mgt-person
         .personDetails=${person}
         .personImage=${'@'}
-        .personCardInteraction=${PersonCardInteraction.hover}
+        .personCardInteraction=${this.personCardInteraction}
       ></mgt-person>
     `;
   }

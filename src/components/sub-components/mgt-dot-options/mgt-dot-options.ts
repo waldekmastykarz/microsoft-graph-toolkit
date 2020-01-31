@@ -10,7 +10,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { MgtBaseComponent } from '../../baseComponent';
 import { styles } from './mgt-dot-options-css';
 /**
- * Custom Component used to handle an arrow rendering for dressers utilized in the task component.
+ * Custom Component used to handle an arrow rendering for TaskGroups utilized in the task component.
  *
  * @export MgtDotOptions
  * @class MgtDotOptions
@@ -42,7 +42,7 @@ export class MgtDotOptions extends MgtBaseComponent {
 
   private _clickHandler: (e: MouseEvent) => void | any = null;
 
-  public constructor() {
+  constructor() {
     super();
     this._clickHandler = (e: MouseEvent) => (this.open = false);
   }

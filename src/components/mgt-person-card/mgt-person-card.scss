@@ -27,23 +27,21 @@ $color: var(--color, #{$ms-color-neutralDark});
 
     .details {
       margin-left: 14px;
+      line-height: 1.15;
 
       .display-name {
         font-size: 27.3103px;
-        // line-height: 36px;
         color: #333333;
       }
 
       .job-title {
         font-size: 18.2069px;
-        // line-height: 31px;
         color: #767676;
         font-weight: 600;
       }
 
       .department {
         font-size: 15.1724px;
-        // line-height: 31px;
         color: #767676;
       }
 
@@ -56,6 +54,7 @@ $color: var(--color, #{$ms-color-neutralDark});
 
         .icon {
           margin: 0 22px 0 0;
+          cursor: pointer;
         }
         .icon:hover {
           opacity: 0.6;
@@ -66,14 +65,13 @@ $color: var(--color, #{$ms-color-neutralDark});
 
   .additional-details-container {
     .additional-details-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       height: 28px;
       background: rgba(196, 196, 196, 0.1);
-      text-align: center;
-      position: relative;
       .additional-details-svg {
-        width: 50%;
-        bottom: 0;
-        top: 100%;
+        margin-bottom: 3px;
       }
     }
     .additional-details-button:hover {
@@ -118,6 +116,7 @@ $color: var(--color, #{$ms-color-neutralDark});
           }
           .link-subtitle {
             color: #3078cd;
+            cursor: pointer;
           }
           .link-subtitle:hover {
             opacity: 0.6;

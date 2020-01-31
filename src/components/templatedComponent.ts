@@ -5,9 +5,26 @@
  * -------------------------------------------------------------------------------------------
  */
 
-import { html } from 'lit-element';
+import { html, PropertyValues } from 'lit-element';
+import { equals } from '../utils/Utils';
 import { MgtBaseComponent } from './baseComponent';
 import { TemplateHelper } from './templateHelper';
+
+/**
+ * Lookup for rendered component templates and contexts by slot name.
+ */
+interface RenderedTemplates {
+  [name: string]: {
+    /**
+     * Reference to the data context used to render the slot.
+     */
+    context: any;
+    /**
+     * Reference to the rendered DOM element corresponding to the slot.
+     */
+    slot: HTMLElement;
+  };
+}
 
 /**
  * An abstract class that defines a templatable web component
@@ -35,6 +52,7 @@ export abstract class MgtTemplatedComponent extends MgtBaseComponent {
   protected templates = {};
 
   private _renderedSlots = false;
+  private _renderedTemplates: RenderedTemplates = {};
   private _slotNamesAddedDuringRender = [];
 
   constructor() {
@@ -65,9 +83,10 @@ export abstract class MgtTemplatedComponent extends MgtBaseComponent {
    * Setting properties inside this method will trigger the element to update
    * again after this update cycle completes.
    *
-   * * @param _changedProperties Map of changed properties with old values
+   * * @param changedProperties Map of changed properties with old values
    */
-  protected updated() {
+  protected updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties);
     this.removeUnusedSlottedElements();
   }
 
@@ -87,13 +106,16 @@ export abstract class MgtTemplatedComponent extends MgtBaseComponent {
     this._slotNamesAddedDuringRender.push(slotName);
     this._renderedSlots = true;
 
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i].slot === slotName) {
-        return html`
-          <slot name=${slotName}></slot>
-        `;
+    const template = html`
+      <slot name=${slotName}></slot>
+    `;
+
+    if (this._renderedTemplates.hasOwnProperty(slotName)) {
+      const { context: existingContext, slot } = this._renderedTemplates[slotName];
+      if (equals(existingContext, context)) {
+        return template;
       }
+      this.removeChild(slot);
     }
 
     const templateContent = TemplateHelper.renderTemplate(
@@ -112,11 +134,11 @@ export abstract class MgtTemplatedComponent extends MgtBaseComponent {
 
     this.appendChild(div);
 
+    this._renderedTemplates[slotName] = { context, slot: div };
+
     this.fireCustomEvent('templateRendered', { templateType, context, element: div });
 
-    return html`
-      <slot name=${slotName}></slot>
-    `;
+    return template;
   }
 
   private getTemplates() {
@@ -144,6 +166,7 @@ export abstract class MgtTemplatedComponent extends MgtBaseComponent {
         const child = this.children[i] as HTMLElement;
         if (child.dataset && child.dataset.generated && !this._slotNamesAddedDuringRender.includes(child.slot)) {
           this.removeChild(child);
+          delete this._renderedTemplates[child.slot];
           i--;
         }
       }

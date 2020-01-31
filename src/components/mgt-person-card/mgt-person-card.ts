@@ -11,7 +11,7 @@ import { Providers } from '../../Providers';
 import { ProviderState } from '../../providers/IProvider';
 import { getEmailFromGraphEntity } from '../../utils/GraphHelpers';
 import { getSvg, SvgIcon } from '../../utils/SvgHelper';
-import { MgtPerson, PersonCardInteraction } from '../mgt-person/mgt-person';
+import { MgtPerson } from '../mgt-person/mgt-person';
 import { MgtTemplatedComponent } from '../templatedComponent';
 import { styles } from './mgt-person-card-css';
 /**
@@ -137,15 +137,18 @@ export class MgtPersonCard extends MgtTemplatedComponent {
           <div class="job-title">${user.jobTitle}</div>
         `;
       }
+
+      const image = this.getImage();
+
       return html`
         <div class="root" @click=${this.handleClose}>
           <div class="default-view">
-            ${this.renderTemplate('default', { person: this.personDetails }) ||
+            ${this.renderTemplate('default', { person: this.personDetails, personImage: image }) ||
               html`
                 <mgt-person
                   class="person-image"
                   .personDetails=${this.personDetails}
-                  .personImage=${this.personImage}
+                  .personImage=${image}
                 ></mgt-person>
                 <div class="details">
                   <div class="display-name">${user.displayName}</div>
@@ -257,7 +260,10 @@ export class MgtPersonCard extends MgtTemplatedComponent {
                 ? html`
                     <div class="section-divider"></div>
                     <div class="custom-section">
-                      ${this.renderTemplate('additional-details', null)}
+                      ${this.renderTemplate('additional-details', {
+                        person: this.personDetails,
+                        personImage: this.getImage()
+                      })}
                     </div>
                   `
                 : null}
@@ -318,7 +324,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       phone = (user as MicrosoftGraph.User).businessPhones[0];
     }
     e.stopPropagation();
-    window.location.assign('tel:' + phone);
+    window.open('tel:' + phone, '_blank');
   }
 
   private _emailUser(e: Event) {
@@ -329,7 +335,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       email = getEmailFromGraphEntity(user);
     }
     e.stopPropagation();
-    window.location.assign('mailto:' + email);
+    window.open('mailto:' + email, '_blank');
   }
 
   private _chatUser(e: Event) {
@@ -340,7 +346,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       chat = (user as MicrosoftGraph.User).mailNickname;
     }
     e.stopPropagation();
-    window.location.assign('sip:' + chat);
+    window.open('sip:' + chat, '_blank');
   }
 
   private async loadData() {
@@ -369,5 +375,14 @@ export class MgtPersonCard extends MgtTemplatedComponent {
 
   private handleClose(e: Event) {
     e.stopPropagation();
+  }
+
+  private getImage(): string {
+    if (this.personImage && this.personImage !== '@') {
+      return this.personImage;
+    } else if (this.personDetails && (this.personDetails as any).personImage) {
+      return (this.personDetails as any).personImage;
+    }
+    return null;
   }
 }

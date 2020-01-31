@@ -7,6 +7,7 @@
 
 import { Context, Middleware } from '@microsoft/microsoft-graph-client';
 import { getRequestHeader, setRequestHeader } from '@microsoft/microsoft-graph-client/lib/es/middleware/MiddlewareUtil';
+import { ComponentMiddlewareOptions } from './ComponentMiddlewareOptions';
 import { PACKAGE_VERSION } from './version';
 
 /**
@@ -21,20 +22,37 @@ export class SdkVersionMiddleware implements Middleware {
    * @private
    * A member to hold next middleware in the middleware chain
    */
-  private nextMiddleware: Middleware;
+  private _nextMiddleware: Middleware;
 
   // tslint:disable-next-line: completed-docs
   public async execute(context: Context): Promise<void> {
     try {
-      let sdkVersionValue: string = `mgt/${PACKAGE_VERSION}`; // todo - add real version
+      // Header parts must follow the format: 'name/version'
+      const headerParts: string[] = [];
 
-      sdkVersionValue += ', ' + getRequestHeader(context.request, context.options, 'SdkVersion');
+      const componentOptions = context.middlewareControl.getMiddlewareOptions(
+        ComponentMiddlewareOptions
+      ) as ComponentMiddlewareOptions;
 
-      setRequestHeader(context.request, context.options, 'SdkVersion', sdkVersionValue);
-      return await this.nextMiddleware.execute(context);
+      if (componentOptions) {
+        const componentVersion: string = `${componentOptions.componentName}/${PACKAGE_VERSION}`;
+        headerParts.push(componentVersion);
+      }
+
+      // Package version
+      const packageVersion: string = `mgt/${PACKAGE_VERSION}`;
+      headerParts.push(packageVersion);
+
+      // Existing SdkVersion header value
+      headerParts.push(getRequestHeader(context.request, context.options, 'SdkVersion'));
+
+      // Join the header parts together and update the SdkVersion request header value
+      const sdkVersionHeaderValue = headerParts.join(', ');
+      setRequestHeader(context.request, context.options, 'SdkVersion', sdkVersionHeaderValue);
     } catch (error) {
-      throw error;
+      // ignore error
     }
+    return await this._nextMiddleware.execute(context);
   }
   /**
    * Handles setting of next middleware
@@ -43,6 +61,6 @@ export class SdkVersionMiddleware implements Middleware {
    * @memberof SdkVersionMiddleware
    */
   public setNext(next: Middleware): void {
-    this.nextMiddleware = next;
+    this._nextMiddleware = next;
   }
 }
