@@ -25,6 +25,74 @@ export default {
   }
 };
 
+// export const GetPresence = () => html`
+//   <mgt-get resource="/me/presence" version="beta" scopes="Presence.Read" polling-rate="2000">
+//     <template>
+//       {{availability}}
+//     </template>
+//   </mgt-get>
+// `;
+
+export const GetChannels = () => html`
+  <!-- <mgt-get id="channelsGet">
+      <template>
+        Channel:
+        <select data-props="{{@change: channelChange}}">
+          <option data-for="channel in value" value="{{channel.id}}">{{channel.displayName}}</option>
+        </select>
+      </template>
+      <template data-type="loading">
+        loading
+      </template>
+    </mgt-get> -->
+
+  <mgt-get id="messagesGet" version="beta" polling-rate="3000">
+    <template data-type="value">
+      <div data-if="!deletedDateTime" class="teams-message">
+        <mgt-person user-id="{{from.user.id}}" show-name></mgt-person>
+        <div>{{body.content}}</div>
+      </div>
+    </template>
+    <template data-type="loading">
+      loading
+    </template>
+  </mgt-get>
+
+  <!-- <mgt-get resource="/me/joinedTeams" id="teamsGet">
+      <template>
+        Team:
+        <select data-props="{{@change: teamChange}}">
+          <option data-for="{{team in value}}" value="{{team.id}}">{{team.displayName}}</option>
+        </select>
+      </template>
+    </mgt-get> -->
+`;
+
+export const GetMessages = () => html`
+  <mgt-get id="messagesGet" version="beta" polling-rate="3000">
+    <template data-type="value">
+      <div data-if="!deletedDateTime" class="teams-message">
+        <mgt-person user-id="{{from.user.id}}" show-name></mgt-person>
+        <div>{{body.content}}</div>
+      </div>
+    </template>
+    <template data-type="loading">
+      loading
+    </template>
+  </mgt-get>
+`;
+
+export const GetJoinedTeams = () => html`
+  <mgt-get resource="/me/joinedTeams" id="teamsGet">
+    <template>
+      Team:
+      <select data-props="{{@change: teamChange}}">
+        <option data-for="{{team in value}}" value="{{team.id}}">{{team.displayName}}</option>
+      </select>
+    </template>
+  </mgt-get>
+`;
+
 export const GetEmail = () => html`
   <mgt-get resource="/me/messages" version="beta" scopes="mail.read" max-pages="2">
     <template>

@@ -91,22 +91,49 @@ export const withCodeEditor = makeDecorator({
       css: styleCode
     };
 
+    editor.getGeneratedPageURL = ({ html, css, js }) => {
+      const getBlobURL = (code, type) => {
+        const blob = new Blob([code], { type });
+        return URL.createObjectURL(blob);
+      };
+
+      const cssURL = getBlobURL(css, 'text/css');
+      const jsURL = getBlobURL(js, 'text/javascript');
+
+      const source = `
+        <html>
+          <head>
+            ${css && `<link rel="stylesheet" type="text/css" href="${cssURL}" />`}
+            ${js && `<script src="${jsURL}"></script>`}
+          </head>
+          <body>
+            ${html || ''}
+          </body>
+        </html>
+      `;
+
+      return getBlobURL(source, 'text/html');
+    };
+
     editor.addEventListener('fileUpdated', () => {
-      storyElement.innerHTML = editor.files.html + `<style>${editor.files.css}</style>`;
+      // storyElement.innerHTML = editor.files.html + `<style>${editor.files.css}</style>`;
+      // eval(editor.files.js);
 
-      // kill all timers in current window before rerunning new possibly edited js
-      var id = window.setTimeout(() => {}, 0);
-      while (id--) {
-        window.clearTimeout(id); // will do nothing if no timeout with id is present
+      const url = getGeneratedPageURL({
+        html: editor.files.html,
+        css: editor.files.css,
+        js: editor.files.js
+      });
+
+      // Check if iframe already created, else created it
+      const iframe = document.querySelector('#iframe');
+      if (!iframe) {
+        // Create an Iframe on the preview window
+        iframe = document.createElement('iframe');
       }
 
-      // kill all intervals in current window before rerunning new possibly edited js
-      var id = window.setInterval(() => {}, 0);
-      while (id--) {
-        window.clearInterval(id); // will do nothing if no timeout with id is present
-      }
-
-      eval(editor.files.js);
+      // update the code in the created iframe
+      iframe.src = url;
     });
 
     const separator = document.createElement('div');
