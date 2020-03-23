@@ -116,24 +116,28 @@ export const withCodeEditor = makeDecorator({
     };
 
     editor.addEventListener('fileUpdated', () => {
-      // storyElement.innerHTML = editor.files.html + `<style>${editor.files.css}</style>`;
-      // eval(editor.files.js);
+      if (0) {
+        storyElement.innerHTML = editor.files.html + `<style>${editor.files.css}</style>`;
+        eval(editor.files.js);
+      } else {
+        const url = editor.getGeneratedPageURL({
+          html: editor.files.html,
+          css: editor.files.css,
+          js: editor.files.js
+        });
 
-      const url = getGeneratedPageURL({
-        html: editor.files.html,
-        css: editor.files.css,
-        js: editor.files.js
-      });
+        // Check if iframe already created, else created it
+        let iframe = document.getElementById('editoriframe');
+        if (!iframe) {
+          // Create an Iframe on the preview window
+          iframe = document.createElement('iframe');
+          iframe.id = 'editoriframe';
+        }
 
-      // Check if iframe already created, else created it
-      const iframe = document.querySelector('#iframe');
-      if (!iframe) {
-        // Create an Iframe on the preview window
-        iframe = document.createElement('iframe');
+        // update the code in the created iframe
+        iframe.src = url;
+        storyElement.appendChild(iframe);
       }
-
-      // update the code in the created iframe
-      iframe.src = url;
     });
 
     const separator = document.createElement('div');
