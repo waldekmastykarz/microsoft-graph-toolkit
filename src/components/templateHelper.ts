@@ -60,29 +60,37 @@ export class TemplateHelper {
     }
   }
 
-  private static _startExpression = '{';
-  private static _endExpression = '}';
-  private static _expression = /{{+\s*[$\w\.()\[\]]+\s*}}+/g;
-
   /**
- * Overrides the expression used in template binding.
- * @param expression regular expression to be used in template binding
- */
+   * Overrides the expression used in template binding.
+   * @param expression regular expression to be used in template binding
+   */
   public static setBindingExpression(startStr: string, endStr: string) {
     this._startExpression = startStr;
     this._endExpression = endStr;
     const escapedStartStr = this.escapeForRegex(startStr);
     const escapedEndStr = this.escapeForRegex(endStr);
-    this._expression = new RegExp(`${escapedStartStr}+\s*[$\w\.()\[\]]+\s*${escapedEndStr}+`, 'g');
+    this._expression = new RegExp(`${escapedStartStr}\\s*\([$\\w\\.()\\[\\]]+\)\\s*${escapedEndStr}`, 'g');
   }
+
+  private static get expression() {
+    if (!this._expression) {
+      this.setBindingExpression('{{', '}}');
+    }
+
+    return this._expression;
+  }
+
+  private static _startExpression: string;
+  private static _endExpression: string;
+  private static _expression: RegExp;
 
   private static escapeForRegex(str: string) {
     return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
   }
 
-  private static expandExpressionsAsString(str: string, context: object, additionalContext: object) {
-    return str.replace(this._expression, match => {
-      const value = this.evalInContext(this.trimExpression(match), { ...context, ...additionalContext });
+  private static expandExpression(str: string, context: object, additionalContext: object) {
+    return str.replace(this.expression, (match, p1) => {
+      const value = this.evalInContext(p1 || this.trimExpression(match), { ...context, ...additionalContext });
       if (value) {
         if (typeof value === 'object') {
           return JSON.stringify(value);
@@ -96,7 +104,7 @@ export class TemplateHelper {
 
   private static renderNode(node: Node, root: HTMLElement, context: object, additionalContext: object) {
     if (node.nodeName === '#text') {
-      node.textContent = this.expandExpressionsAsString(node.textContent, context, additionalContext);
+      node.textContent = this.expandExpression(node.textContent, context, additionalContext);
       return node;
     } else if (node.nodeName === 'TEMPLATE') {
       (node as any).$parentTemplateContext = context;
@@ -131,10 +139,7 @@ export class TemplateHelper {
             }
           }
         } else {
-          nodeElement.setAttribute(
-            attribute.name,
-            this.expandExpressionsAsString(attribute.value, context, additionalContext)
-          );
+          nodeElement.setAttribute(attribute.name, this.expandExpression(attribute.value, context, additionalContext));
         }
       }
     }
@@ -245,22 +250,20 @@ export class TemplateHelper {
     try {
       result = func.call(context);
       // tslint:disable-next-line: no-empty
-    } catch (e) { }
+    } catch (e) {}
     return result;
   }
 
   private static trimExpression(expression: string) {
-    let start = 0;
-    let end = expression.length - 1;
+    expression = expression.trim();
 
-    while (expression[start] === this._startExpression && start < end) {
-      start++;
+    if (
+      expression.substring(expression.length - this._endExpression.length, expression.length) !== this._endExpression ||
+      expression.substring(0, this._startExpression.length) !== this._startExpression
+    ) {
+      return expression;
     }
 
-    while (expression[end] === this._endExpression && start <= end) {
-      end--;
-    }
-
-    return expression.substring(start, end + 1).trim();
+    return expression.substring(this._startExpression.length, expression.length - this._endExpression.length).trim();
   }
 }
