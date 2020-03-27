@@ -19,12 +19,13 @@ import { PersonCardInteraction } from './../PersonCardInteraction';
 import { styles } from './mgt-tasks-css';
 import { ITask, ITaskFolder, ITaskGroup, ITaskSource, PlannerTaskSource, TodoTaskSource } from './task-sources';
 
+import { getMe } from '../../graph/graph.user';
 import { ComponentMediaQuery } from '../baseComponent';
 import { MgtPeople } from '../mgt-people/mgt-people';
 import '../mgt-person/mgt-person';
 import '../sub-components/mgt-arrow-options/mgt-arrow-options';
 import '../sub-components/mgt-dot-options/mgt-dot-options';
-import '../sub-components/mgt-flyout/mgt-flyout';
+import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout';
 
 /**
  * Defines how a person card is shown when a user interacts with
@@ -32,6 +33,53 @@ import '../sub-components/mgt-flyout/mgt-flyout';
  *
  * @export
  * @enum {number}
+ *
+ * @cssprop --tasks-header-padding - {String} Tasks header padding
+ * @cssprop --tasks-header-margin - {String} Tasks header margin
+ * @cssprop --tasks-title-padding - {String} Tasks title padding
+ * @cssprop --tasks-plan-title-font-size - {Length} Tasks plan title font size
+ * @cssprop --tasks-plan-title-padding - {String} Tasks plan title padding
+ * @cssprop --tasks-new-button-width - {String} Tasks new button width
+ * @cssprop --tasks-new-button-height - {String} Tasks new button height
+ * @cssprop --tasks-new-button-color - {Color} Tasks new button color
+ * @cssprop --tasks-new-button-background - {String} Tasks new button background
+ * @cssprop --tasks-new-button-border - {String} Tasks new button border
+ * @cssprop --tasks-new-button-hover-background - {Color} Tasks new button hover background
+ * @cssprop --tasks-new-button-active-background - {Color} Tasks new button active background
+ * @cssprop --tasks-new-task-name-margin - {String} Tasks new task name margin
+ * @cssprop --task-margin - {String} Task margin
+ * @cssprop --task-box-shadow - {String} Task box shadow
+ * @cssprop --task-background - {Color} Task background
+ * @cssprop --task-border - {String} Task border
+ * @cssprop --task-header-color - {Color} Task header color
+ * @cssprop --task-header-margin - {String} Task header margin
+ * @cssprop --task-detail-icon-margin -{String}  Task detail icon margin
+ * @cssprop --task-new-margin - {String} Task new margin
+ * @cssprop --task-new-border - {String} Task new border
+ * @cssprop --task-new-line-margin - {String} Task new line margin
+ * @cssprop --tasks-new-line-border - {String} Tasks new line border
+ * @cssprop --task-new-input-margin - {String} Task new input margin
+ * @cssprop --task-new-input-padding - {String} Task new input padding
+ * @cssprop --task-new-input-font-size - {Length} Task new input font size
+ * @cssprop --task-new-input-active-border - {String} Task new input active border
+ * @cssprop --task-new-select-border - {String} Task new select border
+ * @cssprop --task-new-add-button-background - {Color} Task new add button background
+ * @cssprop --task-new-add-button-disabled-background - {Color} Task new add button disabled background
+ * @cssprop --task-new-cancel-button-color - {Color} Task new cancel button color
+ * @cssprop --task-complete-background - {Color} Task complete background
+ * @cssprop --task-complete-border - {String} Task complete border
+ * @cssprop --task-complete-header-color - {Color} Task complete header color
+ * @cssprop --task-complete-detail-color - {Color} Task complete detail color
+ * @cssprop --task-complete-detail-icon-color - {Color} Task complete detail icon color
+ * @cssprop --tasks-background-color - {Color} Task background color
+ * @cssprop --task-icon-alignment - {String} Task icon alignment
+ * @cssprop --task-icon-background - {Color} Task icon color
+ * @cssprop --task-icon-background-completed - {Color} Task icon background color when completed
+ * @cssprop --task-icon-border - {String} Task icon border styles
+ * @cssprop --task-icon-border-completed - {String} Task icon border style when task is completed
+ * @cssprop --task-icon-border-radius - {String} Task icon border radius
+ * @cssprop --task-icon-color - {Color} Task icon color
+ * @cssprop --task-icon-color-completed - {Color} Task icon color when completed
  */
 export enum TasksSource {
   /**
@@ -227,13 +275,8 @@ export class MgtTasks extends MgtTemplatedComponent {
 
   @property() private _currentGroup: string;
   @property() private _currentFolder: string;
-  @property() private _currentTask: ITask;
-
-  @property() private isPeoplePickerVisible: boolean;
 
   private _me: User = null;
-  private providerUpdateCallback: () => void | any;
-  private handleWindowClick: (event: MouseEvent) => void;
   private previousMediaQuery: ComponentMediaQuery;
 
   constructor() {
@@ -250,8 +293,6 @@ export class MgtTasks extends MgtTemplatedComponent {
 
     this.previousMediaQuery = this.mediaQuery;
     this.onResize = this.onResize.bind(this);
-    this.providerUpdateCallback = () => this.loadTasks();
-    this.handleWindowClick = () => this.hidePeoplePicker();
   }
 
   /**
@@ -261,9 +302,7 @@ export class MgtTasks extends MgtTemplatedComponent {
    */
   public connectedCallback() {
     super.connectedCallback();
-    Providers.onProviderUpdated(this.providerUpdateCallback);
     window.addEventListener('resize', this.onResize);
-    window.addEventListener('click', this.handleWindowClick);
   }
 
   /**
@@ -272,9 +311,7 @@ export class MgtTasks extends MgtTemplatedComponent {
    * @memberof MgtTasks
    */
   public disconnectedCallback() {
-    Providers.removeProviderUpdatedListener(this.providerUpdateCallback);
     window.removeEventListener('resize', this.onResize);
-    window.removeEventListener('click', this.handleWindowClick);
     super.disconnectedCallback();
   }
 
@@ -311,7 +348,7 @@ export class MgtTasks extends MgtTemplatedComponent {
       this._inTaskLoad = false;
       this._todoDefaultSet = false;
 
-      this.loadTasks();
+      this.requestStateUpdate();
     }
   }
 
@@ -322,9 +359,11 @@ export class MgtTasks extends MgtTemplatedComponent {
    * Setting properties inside this method will trigger the element to update
    * again after this update cycle completes.
    *
-   * * @param _changedProperties Map of changed properties with old values
+   * @param _changedProperties Map of changed properties with old values
    */
-  protected firstUpdated() {
+  protected firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+
     if (this.initialId && !this._currentGroup) {
       if (this.dataSource === TasksSource.planner) {
         this._currentGroup = this.initialId;
@@ -336,8 +375,6 @@ export class MgtTasks extends MgtTemplatedComponent {
     if (this.dataSource === TasksSource.planner && this.initialBucketId && !this._currentFolder) {
       this._currentFolder = this.initialBucketId;
     }
-
-    this.loadTasks();
   }
 
   /**
@@ -376,20 +413,13 @@ export class MgtTasks extends MgtTemplatedComponent {
     `;
   }
 
-  private onResize() {
-    if (this.mediaQuery !== this.previousMediaQuery) {
-      this.previousMediaQuery = this.mediaQuery;
-      this.requestUpdate();
-    }
-  }
-
   /**
    * loads tasks from dataSource
    *
    * @returns
    * @memberof MgtTasks
    */
-  private async loadTasks() {
+  protected async loadState() {
     const ts = this.getTaskSource();
     if (!ts) {
       return;
@@ -404,7 +434,7 @@ export class MgtTasks extends MgtTemplatedComponent {
     let meTask;
     if (!this._me) {
       const graph = provider.graph.forComponent(this);
-      meTask = graph.getMe();
+      meTask = getMe(graph);
     }
 
     if (this.groupId && this.dataSource === TasksSource.planner) {
@@ -425,6 +455,13 @@ export class MgtTasks extends MgtTemplatedComponent {
 
     this._inTaskLoad = false;
     this._hasDoneInitialLoad = true;
+  }
+
+  private onResize() {
+    if (this.mediaQuery !== this.previousMediaQuery) {
+      this.previousMediaQuery = this.mediaQuery;
+      this.requestUpdate();
+    }
   }
 
   private async _loadTargetTodoTasks(ts: ITaskSource) {
@@ -523,7 +560,7 @@ export class MgtTasks extends MgtTemplatedComponent {
 
     this._newTaskBeingAdded = true;
     await ts.addTask(newTask);
-    await this.loadTasks();
+    await this.requestStateUpdate();
     this._newTaskBeingAdded = false;
     this.isNewTaskVisible = false;
   }
@@ -535,7 +572,7 @@ export class MgtTasks extends MgtTemplatedComponent {
     }
     this._loadingTasks = [...this._loadingTasks, task.id];
     await ts.setTaskComplete(task.id, task.eTag);
-    await this.loadTasks();
+    await this.requestStateUpdate();
     this._loadingTasks = this._loadingTasks.filter(id => id !== task.id);
   }
 
@@ -547,7 +584,7 @@ export class MgtTasks extends MgtTemplatedComponent {
 
     this._loadingTasks = [...this._loadingTasks, task.id];
     await ts.setTaskIncomplete(task.id, task.eTag);
-    await this.loadTasks();
+    await this.requestStateUpdate();
     this._loadingTasks = this._loadingTasks.filter(id => id !== task.id);
   }
 
@@ -559,7 +596,7 @@ export class MgtTasks extends MgtTemplatedComponent {
 
     this._hiddenTasks = [...this._hiddenTasks, task.id];
     await ts.removeTask(task.id, task.eTag);
-    await this.loadTasks();
+    await this.requestStateUpdate();
     this._hiddenTasks = this._hiddenTasks.filter(id => id !== task.id);
   }
 
@@ -624,7 +661,7 @@ export class MgtTasks extends MgtTemplatedComponent {
     if (task) {
       this._loadingTasks = [...this._loadingTasks, task.id];
       await ts.assignPeopleToTask(task.id, peopleObj, task.eTag);
-      await this.loadTasks();
+      await this.requestStateUpdate();
       this._loadingTasks = this._loadingTasks.filter(id => id !== task.id);
     }
   }
@@ -907,39 +944,32 @@ export class MgtTasks extends MgtTemplatedComponent {
     `;
   }
 
-  private showPeoplePicker(task: ITask) {
-    if (this.isPeoplePickerVisible) {
-      const isCurrentTask = task === this._currentTask;
-      if (isCurrentTask) {
-        this.hidePeoplePicker();
-        return;
-      }
-    }
-    this._currentTask = task;
-    this.isPeoplePickerVisible = true;
-
-    // logic for already created tasks
+  private togglePeoplePicker(task: ITask) {
     const picker = this.getPeoplePicker(task);
     const mgtPeople = this.getMgtPeople(task);
+    const flyout = this.getFlyout(task);
 
-    if (picker && mgtPeople) {
-      picker.selectedPeople = mgtPeople.people;
-      setTimeout(() => {
-        picker.focus();
-      }, 50);
+    if (picker && mgtPeople && flyout) {
+      if (flyout.isOpen) {
+        flyout.close();
+      } else {
+        picker.selectedPeople = mgtPeople.people;
+        flyout.open();
+        window.requestAnimationFrame(() => {
+          picker.focus();
+        });
+      }
     }
   }
 
-  private hidePeoplePicker() {
-    const picker = this.getPeoplePicker(this._currentTask);
-    const mgtPeople = this.getMgtPeople(this._currentTask);
+  private updateAssignedPeople(task: ITask) {
+    const picker = this.getPeoplePicker(task);
+    const mgtPeople = this.getMgtPeople(task);
 
-    if (picker) {
+    if (picker && picker.selectedPeople !== mgtPeople.people) {
       mgtPeople.people = picker.selectedPeople;
-      this.assignPeople(this._currentTask, picker.selectedPeople);
+      this.assignPeople(task, picker.selectedPeople);
     }
-    this.isPeoplePickerVisible = false;
-    this._currentTask = null;
   }
 
   private getPeoplePicker(task: ITask): MgtPeoplePicker {
@@ -954,6 +984,13 @@ export class MgtTasks extends MgtTemplatedComponent {
     const mgtPeople = this.renderRoot.querySelector(`.people-${taskId}`) as MgtPeople;
 
     return mgtPeople;
+  }
+
+  private getFlyout(task: ITask): MgtFlyout {
+    const taskId = task ? task.id : 'newTask';
+    const flyout = this.renderRoot.querySelector(`.flyout-${taskId}`) as MgtFlyout;
+
+    return flyout;
   }
 
   private renderTask(task: ITask) {
@@ -1113,25 +1150,23 @@ export class MgtTasks extends MgtTemplatedComponent {
     `;
 
     const taskId = task ? task.id : 'newTask';
+    taskAssigneeClasses[`flyout-${taskId}`] = true;
 
     assignedPeopleHTML = html`
       <mgt-people
         class="people-${taskId}"
         .userIds="${assignedPeople}"
-        .personCardInteraction=${this.isPeoplePickerVisible ? PersonCardInteraction.none : PersonCardInteraction.hover}
+        .personCardInteraction=${PersonCardInteraction.none}
+        @click=${(e: MouseEvent) => {
+          this.togglePeoplePicker(task);
+          e.stopPropagation();
+        }}
         >${noPeopleTemplate}
       </mgt-people>
     `;
 
     return html`
-      <mgt-flyout
-        class=${classMap(taskAssigneeClasses)}
-        @click=${(e: MouseEvent) => {
-          this.showPeoplePicker(task);
-          e.stopPropagation();
-        }}
-        .isOpen=${this.isPeoplePickerVisible && task === this._currentTask}
-      >
+      <mgt-flyout light-dismiss class=${classMap(taskAssigneeClasses)} @closed=${e => this.updateAssignedPeople(task)}>
         ${assignedPeopleHTML}
         <div slot="flyout" class=${classMap({ Picker: true })}>
           <mgt-people-picker
@@ -1144,7 +1179,7 @@ export class MgtTasks extends MgtTemplatedComponent {
   }
 
   private handleTaskClick(task: ITask) {
-    if (task && !this.isPeoplePickerVisible) {
+    if (task) {
       this.fireCustomEvent('taskClick', { task: task._raw });
     }
   }
