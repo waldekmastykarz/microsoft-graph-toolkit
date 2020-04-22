@@ -133,6 +133,16 @@ export class TeamsProvider extends MsalProvider {
    * @memberof TeamsProvider
    */
   public static async handleAuth() {
+    const url = new URL(window.location.href);
+    const params = url.searchParams.get('authparams');
+
+    if (params) {
+      localStorage.setItem(TeamsProvider._localStorageParametersKey, params);
+      url.searchParams.delete('authparams');
+      window.location.href = url.toString();
+      return;
+    }
+
     // we are in popup world now - authenticate and handle it
     const teams = TeamsHelper.microsoftTeamsLib;
     if (!teams) {
@@ -145,10 +155,10 @@ export class TeamsProvider extends MsalProvider {
 
     // if we were signing out before, then we are done
     if (sessionStorage.getItem(this._sessionStorageLogoutInProgress)) {
+      // console.log('notify success, signout already');
       teams.authentication.notifySuccess();
     }
 
-    const url = new URL(window.location.href);
     const isSignOut = url.searchParams.get('signout');
 
     const paramsString = localStorage.getItem(this._localStorageParametersKey);
@@ -161,6 +171,7 @@ export class TeamsProvider extends MsalProvider {
     }
 
     if (!authParams.clientId) {
+      // console.log('notify fail, no clientid');
       teams.authentication.notifyFailure('no clientId provided');
       return;
     }
@@ -175,6 +186,9 @@ export class TeamsProvider extends MsalProvider {
         },
         system: {
           loadFrameTimeout: 10000
+        },
+        cache: {
+          cacheLocation: 'sessionStorage'
         }
       },
       scopes
@@ -191,6 +205,7 @@ export class TeamsProvider extends MsalProvider {
       if (provider.state === ProviderState.SignedOut) {
         if (isSignOut) {
           teams.authentication.notifySuccess();
+          // console.log('notify success, signout');
           return;
         }
 
@@ -212,7 +227,9 @@ export class TeamsProvider extends MsalProvider {
         try {
           const accessToken = await provider.getAccessTokenForScopes(...provider.scopes);
           teams.authentication.notifySuccess(accessToken);
+          // console.log('notify success, sign in', accessToken);
         } catch (e) {
+          // console.log('notify fail', e);
           teams.authentication.notifyFailure(e);
         }
       }
@@ -263,9 +280,10 @@ export class TeamsProvider extends MsalProvider {
           scopes: this.scopes.join(',')
         };
 
-        localStorage.setItem(TeamsProvider._localStorageParametersKey, JSON.stringify(authParams));
+        // localStorage.setItem(TeamsProvider._localStorageParametersKey, JSON.stringify(authParams));
 
         const url = new URL(this._authPopupUrl, new URL(window.location.href));
+        url.searchParams.append('authparams', JSON.stringify(authParams));
 
         teams.authentication.authenticate({
           failureCallback: reason => {
