@@ -42,6 +42,23 @@ interface IFocusable {
  * @class MgtPicker
  * @extends {MgtTemplatedComponent}
  *
+ * @cssprop --font-color - {font} Default font color
+ *
+ * @cssprop --input-border - {String} Input section entire border
+ * @cssprop --input-border-top - {String} Input section border top only
+ * @cssprop --input-border-right - {String} Input section border right only
+ * @cssprop --input-border-bottom - {String} Input section border bottom only
+ * @cssprop --input-border-left - {String} Input section border left only
+ * @cssprop --input-background-color - {Color} Input section background color
+ * @cssprop --input-hover-color - {Color} Input text hover color
+ * @cssprop --input-focus-color - {Color} Input text focus color
+ *
+ * @cssprop --dropdown-background-color - {Color} Background color of dropdown area
+ * @cssprop --dropdown-item-hover-background - {Color} Background color of channel or team during hover
+ * @cssprop --dropdown-item-selected-background - {Color} Background color of selected channel
+ *
+ * @cssprop --placeholder-focus-color - {Color} Color of placeholder text during focus state
+ * @cssprop --placeholder-default-color - {Color} Color of placeholder text
  * @fires selectionChanged - Fired when selection changes
  *
  * @cssprop --people-list-background-color - {Color} People list background color
@@ -55,6 +72,17 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
    */
   static get styles() {
     return styles;
+  }
+
+  /**
+   * Gets the flyout element
+   *
+   * @protected
+   * @type {MgtFlyout}
+   * @memberof MgtLogin
+   */
+  protected get flyout(): MgtFlyout {
+    return this.renderRoot.querySelector('.flyout');
   }
 
   /**
@@ -185,17 +213,6 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
    */
   protected userInput: string;
 
-  /**
-   * Gets the flyout element
-   *
-   * @protected
-   * @type {MgtFlyout}
-   * @memberof MgtLogin
-   */
-  protected get flyout(): MgtFlyout {
-    return this.renderRoot.querySelector('.flyout');
-  }
-
   // if search is still loading don't load "people not found" state
   @property({ attribute: false }) private _showLoading: boolean;
 
@@ -208,6 +225,7 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
   // List of people requested if group property is provided
   private _groupPeople: IDynamicPerson[];
   private _debouncedSearch: { (): void; (): void };
+  private _isFocused = false;
 
   @internalProperty() private _foundPeople: IDynamicPerson[];
 
@@ -238,6 +256,7 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
    * @memberof MgtPeoplePicker
    */
   public focus(options?: FocusOptions) {
+    this.gainedFocus();
     const peopleInput = this.renderRoot.querySelector('.people-selected-input') as HTMLInputElement;
     if (!peopleInput) {
       return;
@@ -293,14 +312,18 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
     const selectedPeopleTemplate = this.renderSelectedPeople(this.selectedPeople);
     const inputTemplate = this.renderInput();
     const flyoutTemplate = this.renderFlyout(inputTemplate);
+
+    const inputClasses = {
+      focused: this._isFocused,
+      'people-picker': true
+    };
     return html`
-      <div class="people-picker" @click=${() => this.focus()}>
+      <div class=${classMap(inputClasses)} @click=${() => this.focus()}>
         <div class="people-picker-input">
           <div class="people-selected-list">
             ${selectedPeopleTemplate} ${flyoutTemplate}
           </div>
         </div>
-        <div class="people-list-separator"></div>
       </div>
     `;
   }
@@ -349,6 +372,7 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
           .value="${this.userInput}"
           @keydown="${this.onUserKeyDown}"
           @keyup="${this.onUserKeyUp}"
+          @blur=${this.lostFocus}
         />
       </div>
     `;
@@ -678,6 +702,21 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
         this._foundPeople = [];
       }
     }
+  }
+
+  private gainedFocus() {
+    this._isFocused = true;
+    const input = this.renderRoot.querySelector('.people-selected-input') as HTMLInputElement;
+    if (input) {
+      input.focus();
+    }
+
+    this.requestUpdate();
+  }
+
+  private lostFocus() {
+    this._isFocused = false;
+    this.requestUpdate();
   }
 
   private renderHighlightText(person: IDynamicPerson): TemplateResult {
