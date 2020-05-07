@@ -42,6 +42,8 @@ interface IFocusable {
  * @class MgtPicker
  * @extends {MgtTemplatedComponent}
  *
+ * @fires selectionChanged - Fired when selection changes
+ *
  * @cssprop --font-color - {font} Default font color
  *
  * @cssprop --input-border - {String} Input section entire border
@@ -59,7 +61,6 @@ interface IFocusable {
  *
  * @cssprop --placeholder-focus-color - {Color} Color of placeholder text during focus state
  * @cssprop --placeholder-default-color - {Color} Color of placeholder text
- * @fires selectionChanged - Fired when selection changes
  *
  * @cssprop --people-list-background-color - {Color} People list background color
  * @cssprop --accent-color - {Color} Accent color
@@ -225,7 +226,7 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
   // List of people requested if group property is provided
   private _groupPeople: IDynamicPerson[];
   private _debouncedSearch: { (): void; (): void };
-  private _isFocused = false;
+  @internalProperty() private _isFocused = false;
 
   @internalProperty() private _foundPeople: IDynamicPerson[];
 
@@ -692,6 +693,9 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
     if (person) {
       this.userInput = '';
       const duplicatePeople = this.selectedPeople.filter(p => {
+        if (!person.id) {
+          return p.displayName === person.displayName;
+        }
         return p.id === person.id;
       });
 
@@ -710,13 +714,10 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
     if (input) {
       input.focus();
     }
-
-    this.requestUpdate();
   }
 
   private lostFocus() {
     this._isFocused = false;
-    this.requestUpdate();
   }
 
   private renderHighlightText(person: IDynamicPerson): TemplateResult {
@@ -832,6 +833,9 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
    * @param event - event tracked on user input (keydown)
    */
   private onUserKeyDown(event: KeyboardEvent): void {
+    if (!this.flyout.isOpen) {
+      return;
+    }
     if (event.keyCode === 40 || event.keyCode === 38) {
       // keyCodes capture: down arrow (40) and up arrow (38)
       this.handleArrowSelection(event);
@@ -897,12 +901,16 @@ export class MgtPeoplePicker extends MgtTemplatedComponent {
     // find ids from selected people
     if (people) {
       const idFilter = this.selectedPeople.map(el => {
-        return el.id;
+        return el.id ? el.id : el.displayName;
       });
 
       // filter id's
       const filtered = people.filter((person: IDynamicPerson) => {
-        return idFilter.indexOf(person.id) === -1;
+        if (person.id) {
+          return idFilter.indexOf(person.id) === -1;
+        } else {
+          return idFilter.indexOf(person.displayName) === -1;
+        }
       });
 
       return filtered;
