@@ -402,7 +402,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       (personPerson.phones && personPerson.phones.length > 0)
     ) {
       phone = html`
-        <div class="icon" @click=${() => this.callUser()}>
+        <div class="icon" @click=${() => this.callUserTeams()}>
           ${getSvg(SvgIcon.Phone, '#666666')}
         </div>
       `;
@@ -526,7 +526,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
     let phone: TemplateResult;
     if (userPerson.businessPhones && userPerson.businessPhones.length > 0) {
       phone = html`
-        <div class="details-icon" @click=${() => this.callUser()}>
+        <div class="details-icon" @click=${() => this.callUserTeams()}>
           ${getSvg(SvgIcon.SmallPhone, '#666666')}
           <span class="link-subtitle data">${userPerson.businessPhones[0]}</span>
         </div>
@@ -534,7 +534,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
     } else if (personPerson.phones && personPerson.phones.length > 0) {
       const businessPhones = this.getPersonBusinessPhones(personPerson);
       phone = html`
-        <div class="details-icon" @click=${() => this.callUser()}>
+        <div class="details-icon" @click=${() => this.callUserTeams()}>
           ${getSvg(SvgIcon.SmallPhone, '#666666')}
           <span class="link-subtitle data">${businessPhones[0]}</span>
         </div>
@@ -704,6 +704,60 @@ export class MgtPersonCard extends MgtTemplatedComponent {
     if (user && user.userPrincipalName) {
       const users: string = user.userPrincipalName;
       const url = `https://teams.microsoft.com/l/chat/0/0?users=${users}`;
+      const openWindow = () => window.open(url, '_blank');
+
+      if (TeamsHelper.isAvailable) {
+        TeamsHelper.executeDeepLink(url, (status: boolean) => {
+          if (!status) {
+            openWindow();
+          }
+        });
+      } else {
+        openWindow();
+      }
+    }
+  }
+
+  /**
+   * Initiate call with callto: protocol
+   * callto will initially prompt the user to select which app to use (incl teams)
+   * Unforunately doesn't act like deep link, and forces user to use teams app
+   *
+   * @protected
+   * @memberof MgtPersonCard
+   */
+  protected callUserTeams() {
+    const user = this.personDetails as MicrosoftGraph.User;
+    const person = this.personDetails as microsoftgraph.Person;
+    const users: string = user.userPrincipalName;
+
+    if (user && user.businessPhones && user.businessPhones.length) {
+      const phone = user.businessPhones[0];
+      if (phone) {
+        window.open('callto:' + users, '_blank');
+      }
+    } else if (person && person.phones && person.phones.length) {
+      const businessPhones = this.getPersonBusinessPhones(person);
+      const phone = businessPhones[0];
+      if (phone) {
+        window.open('callto:' + users, '_blank');
+      }
+    }
+  }
+
+  /**
+   * Initiate call with deep link
+   * Endpoint is currently unsupported, but might eventually be implemented
+   *
+   * @protected
+   * @memberof MgtPersonCard
+   */
+  protected callUserTeams2() {
+    const user = this.personDetails as MicrosoftGraph.User;
+    if (user && user.userPrincipalName) {
+      const users: string = user.userPrincipalName;
+      const url = `https://teams.microsoft.com/l/call/0/new?users=${users}`;
+
       const openWindow = () => window.open(url, '_blank');
 
       if (TeamsHelper.isAvailable) {
