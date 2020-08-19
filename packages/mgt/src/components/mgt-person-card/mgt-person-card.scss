@@ -186,3 +186,38 @@ $person-card-background-color: var(--person-card-background-color, #ffffff);
     }
   }
 }
+
+:host-context([dir='rtl']) {
+  .details {
+    margin-right: 15px;
+    display: grid;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: transparent;
+    width: 100%;
+    direction: rtl;
+    .display-name {
+      &::after {
+        display: none;
+      }
+    }
+    .base-icons :first-child {
+      margin: 0px 0px 0px 0px !important;
+    }
+  }
+  .expanded-details-container {
+    margin-right: 20px;
+    .expanded-details-info {
+      .contact-text {
+        margin-right: 24px;
+      }
+      .data {
+        text-align: right;
+        display: block;
+        margin: 0 10px 0px 0px;
+      }
+    }
+  }
+}

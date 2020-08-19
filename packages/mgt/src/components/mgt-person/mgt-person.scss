@@ -29,6 +29,7 @@ $line2-color: var(--line2-color, var(--email-color, #{$color}));
 $line2-text-transform: var(--line2-text-transform, #{$text-transform});
 
 $details-spacing: --details-spacing;
+$details-spacing-right: --details-spacing-right;
 
 $presence-color-online: #6bb700;
 $presence-color-dnd: #c50f1f;
@@ -388,5 +389,23 @@ mgt-person .avatar-icon {
     font-size: $avatar-size-s;
     width: $avatar-size-s;
     height: $avatar-size-s;
+  }
+}
+
+:host-context([dir='rtl']) {
+  .root {
+    direction: rtl;
+  }
+  svg {
+    direction: rtl;
+  }
+  .user-avatar {
+    position: relative;
+  }
+  .details {
+    margin-right: var($details-spacing-right, 12px);
+    &.small {
+      margin-right: var($details-spacing-right, 6px);
+    }
   }
 }

@@ -369,3 +369,68 @@ mgt-people-picker .people-person-text-area {
 mgt-flyout {
   flex: 1 0 auto;
 }
+
+:host-context([dir='rtl']) {
+  .selected-person {
+    margin-right: 0px;
+  }
+  .overflow-offset {
+    margin-left: 25px;
+    .overflow-gradient {
+      right: auto;
+      content: '';
+      position: absolute;
+      margin-right: 0px;
+      width: 10px;
+      height: 90%;
+      top: 0;
+      background-image: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 60%,
+        $selected-person-background-color 100%
+      );
+      background-image: -moz-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 60%,
+        $selected-person-background-color 100%
+      );
+      background-image: -o-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 60%,
+        $selected-person-background-color 100%
+      );
+      background-image: -ms-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 60%,
+        $selected-person-background-color 100%
+      );
+      background-image: -webkit-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 60%,
+        $selected-person-background-color 100%
+      );
+    }
+  }
+
+  .CloseIcon {
+    margin-left: 5px;
+    left: 0px;
+    right: auto;
+  }
+
+  mgt-person {
+    --details-spacing: 4px;
+    --details-spacing-right: 6px;
+  }
+  .flyout-root {
+    text-align: right;
+  }
+  .people-selected-input {
+    padding-right: 8px;
+  }
+}

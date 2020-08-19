@@ -24,6 +24,7 @@ mgt-login {
   --popup-command-font-size: #{$ms-font-size-s};
   --popup-command-margin: 16px 0 0;
   --popup-padding: 24px 48px 16px 24px;
+  --popup-padding-right: 24px 24px 16px 48px;
   --popup-color: #{$ms-color-neutralPrimary};
 }
 
@@ -115,5 +116,35 @@ mgt-login .popup-command {
 
   &:hover {
     color: var(--theme-dark-color);
+  }
+}
+
+:host-context([dir='rtl']) {
+  .login-button {
+    background-color: blue;
+    direction: rtl;
+    mgt-person {
+      --details-spacing: 0px;
+      --details-spacing-right: 6px;
+    }
+  }
+  :host .popup,
+  mgt-login .popup {
+    font-family: var(--default-font-family);
+    background: var(--popup-content-background-color);
+    min-width: 240px;
+    z-index: 1;
+    color: var(--popup-color);
+    --color: var(--popup-color);
+    &.rtl {
+      direction: rtl;
+      .popup-content {
+        padding: var(--popup-padding-right);
+      }
+      mgt-person {
+        --details-spacing: 0px;
+        --details-spacing-right: 6px;
+      }
+    }
   }
 }

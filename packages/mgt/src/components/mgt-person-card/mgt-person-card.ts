@@ -528,7 +528,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       phone = html`
         <div class="details-icon" @click=${() => this.callUser()}>
           ${getSvg(SvgIcon.SmallPhone, '#666666')}
-          <span class="link-subtitle data">${userPerson.businessPhones[0]}</span>
+          <span class="link-subtitle data phone">${userPerson.businessPhones[0]}</span>
         </div>
       `;
     } else if (personPerson.phones && personPerson.phones.length > 0) {
@@ -536,7 +536,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
       phone = html`
         <div class="details-icon" @click=${() => this.callUser()}>
           ${getSvg(SvgIcon.SmallPhone, '#666666')}
-          <span class="link-subtitle data">${businessPhones[0]}</span>
+          <span class="link-subtitle data phone">${businessPhones[0]}</span>
         </div>
       `;
     }
