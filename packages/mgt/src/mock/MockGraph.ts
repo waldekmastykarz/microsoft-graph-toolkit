@@ -15,10 +15,10 @@ import {
   RetryHandlerOptions,
   TelemetryHandler
 } from '@microsoft/microsoft-graph-client';
-import { MgtBaseComponent } from '../components/baseComponent';
-import { Graph } from '../Graph';
-import { chainMiddleware } from '../utils/GraphHelpers';
-import { MockProvider } from './MockProvider';
+import { MgtBaseComponent } from '../components/baseComponent.js';
+import { Graph } from '../Graph.js';
+import { chainMiddleware } from '../utils/GraphHelpers.js';
+import { MockProvider } from './MockProvider.js';
 
 /**
  * The base URL for the mock endpoint

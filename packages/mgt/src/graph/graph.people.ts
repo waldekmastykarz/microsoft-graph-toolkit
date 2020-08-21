@@ -7,9 +7,9 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import { Contact, Person, User } from '@microsoft/microsoft-graph-types';
-import { CacheItem, CacheSchema, CacheService, CacheStore } from '../utils/Cache';
-import { prepScopes } from '../utils/GraphHelpers';
-import { IDynamicPerson } from './types';
+import { CacheItem, CacheSchema, CacheService, CacheStore } from '../utils/Cache.js';
+import { prepScopes } from '../utils/GraphHelpers.js';
+import { IDynamicPerson } from './types.js';
 
 /**
  * Person Type enum

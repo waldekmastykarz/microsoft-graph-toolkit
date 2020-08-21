@@ -5,8 +5,8 @@
  * -------------------------------------------------------------------------------------------
  */
 
-import { createFromProvider, Graph } from '../Graph';
-import { IProvider, ProviderState } from './IProvider';
+import { createFromProvider, Graph } from '../Graph.js';
+import { IProvider, ProviderState } from './IProvider.js';
 
 /**
  * AadTokenProvider

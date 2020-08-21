@@ -8,14 +8,14 @@
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import { customElement, html, property, TemplateResult } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import '../../styles/fabric-icon-font';
-import { getSvg, SvgIcon } from '../../utils/SvgHelper';
-import { debounce } from '../../utils/Utils';
-import { MgtTemplatedComponent } from '../templatedComponent';
-import { styles } from './mgt-teams-channel-picker-css';
-import { getAllMyTeams } from './mgt-teams-channel-picker.graph';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import '../../styles/fabric-icon-font.js';
+import { getSvg, SvgIcon } from '../../utils/SvgHelper.js';
+import { debounce } from '../../utils/Utils.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
+import { styles } from './mgt-teams-channel-picker-css.js';
+import { getAllMyTeams } from './mgt-teams-channel-picker.graph.js';
 
 /**
  * Team with displayName

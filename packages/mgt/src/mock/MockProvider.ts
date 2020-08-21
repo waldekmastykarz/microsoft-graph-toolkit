@@ -5,8 +5,8 @@
  * -------------------------------------------------------------------------------------------
  */
 
-import { IProvider, ProviderState } from '../providers/IProvider';
-import { MockGraph } from './MockGraph';
+import { IProvider, ProviderState } from '../providers/IProvider.js';
+import { MockGraph } from './MockGraph.js';
 
 /**
  * Mock Provider access token for Microsoft Graph APIs

@@ -7,7 +7,7 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import { PlannerBucket, PlannerPlan, PlannerTask } from '@microsoft/microsoft-graph-types';
-import { prepScopes } from '../../utils/GraphHelpers';
+import { prepScopes } from '../../utils/GraphHelpers.js';
 
 /**
  * async promise, allows developer to create new Planner task

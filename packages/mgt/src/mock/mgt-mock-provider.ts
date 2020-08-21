@@ -6,9 +6,9 @@
  */
 
 import { customElement, LitElement, property } from 'lit-element';
-import { MgtBaseProvider } from '../components/providers/baseProvider';
-import { Providers } from '../Providers';
-import { MockProvider } from './MockProvider';
+import { MgtBaseProvider } from '../components/providers/baseProvider.js';
+import { Providers } from '../Providers.js';
+import { MockProvider } from './MockProvider.js';
 /**
  * Sets global provider to a mock Provider
  *

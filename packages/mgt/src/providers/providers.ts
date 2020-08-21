@@ -5,9 +5,9 @@
  * -------------------------------------------------------------------------------------------
  */
 
-export * from './IProvider';
-export * from './MsalProvider';
-export * from './SharePointProvider';
-export * from './TeamsProvider';
-export * from './SimpleProvider';
-export * from './ProxyProvider';
+export * from './IProvider.js';
+export * from './MsalProvider.js';
+export * from './SharePointProvider.js';
+export * from './TeamsProvider.js';
+export * from './SimpleProvider.js';
+export * from './ProxyProvider.js';

@@ -18,12 +18,12 @@ import {
 } from '@microsoft/microsoft-graph-client';
 
 import { IGraph } from '@microsoft/mgt-element';
-import { IProvider } from '.';
-import { Batch } from './utils/Batch';
-import { ComponentMiddlewareOptions } from './utils/ComponentMiddlewareOptions';
-import { chainMiddleware } from './utils/GraphHelpers';
-import { SdkVersionMiddleware } from './utils/SdkVersionMiddleware';
-import { PACKAGE_VERSION } from './utils/version';
+import { IProvider } from './providers/IProvider.js';
+import { Batch } from './utils/Batch.js';
+import { ComponentMiddlewareOptions } from './utils/ComponentMiddlewareOptions.js';
+import { chainMiddleware } from './utils/GraphHelpers.js';
+import { SdkVersionMiddleware } from './utils/SdkVersionMiddleware.js';
+import { PACKAGE_VERSION } from './utils/version.js';
 
 /**
  * The version of the Graph to use for making requests.

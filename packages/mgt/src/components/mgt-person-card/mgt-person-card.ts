@@ -8,18 +8,18 @@
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import * as MicrosoftGraphBeta from '@microsoft/microsoft-graph-types-beta';
 import { customElement, html, property, TemplateResult } from 'lit-element';
-import { findPeople, getEmailFromGraphEntity } from '../../graph/graph.people';
-import { getPersonImage } from '../../graph/graph.photos';
-import { getUserPresence } from '../../graph/graph.presence';
-import { getUserWithPhoto } from '../../graph/graph.user';
-import { IDynamicPerson } from '../../graph/types';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import { getSvg, SvgIcon } from '../../utils/SvgHelper';
-import { TeamsHelper } from '../../utils/TeamsHelper';
-import { MgtPerson } from '../mgt-person/mgt-person';
-import { MgtTemplatedComponent } from '../templatedComponent';
-import { styles } from './mgt-person-card-css';
+import { findPeople, getEmailFromGraphEntity } from '../../graph/graph.people.js';
+import { getPersonImage } from '../../graph/graph.photos.js';
+import { getUserPresence } from '../../graph/graph.presence.js';
+import { getUserWithPhoto } from '../../graph/graph.user.js';
+import { IDynamicPerson } from '../../graph/types.js';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import { getSvg, SvgIcon } from '../../utils/SvgHelper.js';
+import { TeamsHelper } from '../../utils/TeamsHelper.js';
+import { MgtPerson } from '../mgt-person/mgt-person.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
+import { styles } from './mgt-person-card-css.js';
 
 /**
  * Web Component used to show detailed data for a person in the

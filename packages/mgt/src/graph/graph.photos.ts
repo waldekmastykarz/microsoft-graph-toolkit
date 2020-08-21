@@ -8,11 +8,11 @@
 import { IGraph } from '@microsoft/mgt-element';
 import { ResponseType } from '@microsoft/microsoft-graph-client';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
-import { CacheItem, CacheSchema, CacheService, CacheStore } from '../utils/Cache';
-import { prepScopes } from '../utils/GraphHelpers';
-import { blobToBase64 } from '../utils/Utils';
-import { findContactByEmail, findUserByEmail, getEmailFromGraphEntity } from './graph.people';
-import { IDynamicPerson } from './types';
+import { CacheItem, CacheSchema, CacheService, CacheStore } from '../utils/Cache.js';
+import { prepScopes } from '../utils/GraphHelpers.js';
+import { blobToBase64 } from '../utils/Utils.js';
+import { findContactByEmail, findUserByEmail, getEmailFromGraphEntity } from './graph.people.js';
+import { IDynamicPerson } from './types.js';
 
 /**
  * defines the structure of the cache

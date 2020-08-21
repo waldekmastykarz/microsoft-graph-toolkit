@@ -9,22 +9,22 @@ import { User } from '@microsoft/microsoft-graph-types';
 import { customElement, html, internalProperty, property, TemplateResult } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { findGroups, GroupType } from '../../graph/graph.groups';
-import { findPeople, getPeople, getPeopleFromGroup, PersonType } from '../../graph/graph.people';
-import { findUsers, getUser, getUsersForUserIds } from '../../graph/graph.user';
-import { IDynamicPerson } from '../../graph/types';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import '../../styles/fabric-icon-font';
-import { debounce } from '../../utils/Utils';
-import { PersonViewType } from '../mgt-person/mgt-person';
-import { PersonCardInteraction } from '../PersonCardInteraction';
-import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout';
-import { MgtTemplatedComponent } from '../templatedComponent';
-import { styles } from './mgt-people-picker-css';
+import { findGroups, GroupType } from '../../graph/graph.groups.js';
+import { findPeople, getPeople, getPeopleFromGroup, PersonType } from '../../graph/graph.people.js';
+import { findUsers, getUser, getUsersForUserIds } from '../../graph/graph.user.js';
+import { IDynamicPerson } from '../../graph/types.js';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import '../../styles/fabric-icon-font.js';
+import { debounce } from '../../utils/Utils.js';
+import { PersonViewType } from '../mgt-person/mgt-person.js';
+import { PersonCardInteraction } from '../PersonCardInteraction.js';
+import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
+import { styles } from './mgt-people-picker-css.js';
 
-export { GroupType } from '../../graph/graph.groups';
-export { PersonType } from '../../graph/graph.people';
+export { GroupType } from '../../graph/graph.groups.js';
+export { PersonType } from '../../graph/graph.people.js';
 /**
  * An interface used to mark an object as 'focused',
  * so it can be rendered differently.

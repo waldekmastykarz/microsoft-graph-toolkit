@@ -7,8 +7,8 @@
 
 import { customElement, html, LitElement, property, PropertyValues, query, TemplateResult } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { getSegmentAwareWindow, isWindowSegmentAware, IWindowSegment } from '../../../utils/WindowSegmentHelpers';
-import { styles } from './mgt-flyout-css';
+import { getSegmentAwareWindow, isWindowSegmentAware, IWindowSegment } from '../../../utils/WindowSegmentHelpers.js';
+import { styles } from './mgt-flyout-css.js';
 
 /**
  * A component to create flyout anchored to an element

@@ -7,9 +7,9 @@
 
 import { AuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/es/IAuthenticationProviderOptions';
 import { AuthenticationParameters, Configuration, UserAgentApplication } from 'msal';
-import { TeamsHelper } from '../utils/TeamsHelper';
-import { LoginType, ProviderState } from './IProvider';
-import { MsalProvider } from './MsalProvider';
+import { TeamsHelper } from '../utils/TeamsHelper.js';
+import { LoginType, ProviderState } from './IProvider.js';
+import { MsalProvider } from './MsalProvider.js';
 
 // tslint:disable-next-line: completed-docs
 declare global {

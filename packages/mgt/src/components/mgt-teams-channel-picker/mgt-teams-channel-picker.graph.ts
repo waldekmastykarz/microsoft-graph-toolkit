@@ -7,7 +7,7 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import { Team } from '@microsoft/microsoft-graph-types';
-import { prepScopes } from '../../utils/GraphHelpers';
+import { prepScopes } from '../../utils/GraphHelpers.js';
 
 /**
  * async promise, returns all Teams associated with the user logged in

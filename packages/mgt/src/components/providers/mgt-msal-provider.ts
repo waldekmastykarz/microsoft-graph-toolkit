@@ -6,10 +6,10 @@
  */
 
 import { customElement, LitElement, property } from 'lit-element';
-import { Providers } from '../../Providers';
-import { LoginType } from '../../providers/IProvider';
-import { MsalConfig, MsalProvider } from '../../providers/MsalProvider';
-import { MgtBaseProvider } from './baseProvider';
+import { Providers } from '../../Providers.js';
+import { LoginType } from '../../providers/IProvider.js';
+import { MsalConfig, MsalProvider } from '../../providers/MsalProvider.js';
+import { MgtBaseProvider } from './baseProvider.js';
 /**
  * Authentication Library Provider for Microsoft personal accounts
  *

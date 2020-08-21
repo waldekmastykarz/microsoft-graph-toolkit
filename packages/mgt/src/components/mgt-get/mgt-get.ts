@@ -6,11 +6,11 @@
  */
 
 import { customElement, html, property } from 'lit-element';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import { prepScopes } from '../../utils/GraphHelpers';
-import { equals } from '../../utils/Utils';
-import { MgtTemplatedComponent } from '../templatedComponent';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import { prepScopes } from '../../utils/GraphHelpers.js';
+import { equals } from '../../utils/Utils.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
 
 /**
  * Custom element for making Microsoft Graph get queries

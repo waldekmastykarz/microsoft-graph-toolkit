@@ -8,19 +8,19 @@
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import { customElement, html, property, TemplateResult } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { getPeople, getPeopleFromGroup } from '../../graph/graph.people';
-import { getUsersPresenceByPeople } from '../../graph/graph.presence';
-import { getUsersForPeopleQueries, getUsersForUserIds } from '../../graph/graph.user';
-import { IDynamicPerson } from '../../graph/types';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import '../../styles/fabric-icon-font';
-import { arraysAreEqual } from '../../utils/Utils';
-import { MgtTemplatedComponent } from '../templatedComponent';
-import { PersonCardInteraction } from './../PersonCardInteraction';
-import { styles } from './mgt-people-css';
+import { getPeople, getPeopleFromGroup } from '../../graph/graph.people.js';
+import { getUsersPresenceByPeople } from '../../graph/graph.presence.js';
+import { getUsersForPeopleQueries, getUsersForUserIds } from '../../graph/graph.user.js';
+import { IDynamicPerson } from '../../graph/types.js';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import '../../styles/fabric-icon-font.js';
+import { arraysAreEqual } from '../../utils/Utils.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
+import { PersonCardInteraction } from './../PersonCardInteraction.js';
+import { styles } from './mgt-people-css.js';
 
-export { PersonCardInteraction } from './../PersonCardInteraction';
+export { PersonCardInteraction } from './../PersonCardInteraction.js';
 
 /**
  * web component to display a group of people or contacts by using their photos or initials.

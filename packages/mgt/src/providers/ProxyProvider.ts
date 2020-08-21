@@ -5,10 +5,10 @@
  * -------------------------------------------------------------------------------------------
  */
 
-import { Graph } from '../Graph';
-import { getMe } from '../graph/graph.user';
-import { IProvider, ProviderState } from '../providers/IProvider';
-import { ProxyGraph } from '../ProxyGraph';
+import { Graph } from '../Graph.js';
+import { getMe } from '../graph/graph.user.js';
+import { IProvider, ProviderState } from '../providers/IProvider.js';
+import { ProxyGraph } from '../ProxyGraph.js';
 
 /**
  * Proxy Provider access token for Microsoft Graph APIs

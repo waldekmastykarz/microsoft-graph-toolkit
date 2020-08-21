@@ -9,23 +9,23 @@ import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import * as MicrosoftGraphBeta from '@microsoft/microsoft-graph-types-beta';
 import { customElement, html, internalProperty, property, TemplateResult } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { findPeople, getEmailFromGraphEntity } from '../../graph/graph.people';
-import { getPersonImage } from '../../graph/graph.photos';
-import { getUserPresence } from '../../graph/graph.presence';
-import { getUserWithPhoto } from '../../graph/graph.user';
-import { AvatarSize, IDynamicPerson } from '../../graph/types';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import '../../styles/fabric-icon-font';
-import { getSvg, SvgIcon } from '../../utils/SvgHelper';
-import { MgtPersonCard } from '../mgt-person-card/mgt-person-card';
-import '../sub-components/mgt-flyout/mgt-flyout';
-import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout';
-import { MgtTemplatedComponent } from '../templatedComponent';
-import { PersonCardInteraction } from './../PersonCardInteraction';
-import { styles } from './mgt-person-css';
+import { findPeople, getEmailFromGraphEntity } from '../../graph/graph.people.js';
+import { getPersonImage } from '../../graph/graph.photos.js';
+import { getUserPresence } from '../../graph/graph.presence.js';
+import { getUserWithPhoto } from '../../graph/graph.user.js';
+import { AvatarSize, IDynamicPerson } from '../../graph/types.js';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import '../../styles/fabric-icon-font.js';
+import { getSvg, SvgIcon } from '../../utils/SvgHelper.js';
+import { MgtPersonCard } from '../mgt-person-card/mgt-person-card.js';
+import '../sub-components/mgt-flyout/mgt-flyout.js';
+import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
+import { PersonCardInteraction } from './../PersonCardInteraction.js';
+import { styles } from './mgt-person-css.js';
 
-export { PersonCardInteraction } from '../PersonCardInteraction';
+export { PersonCardInteraction } from '../PersonCardInteraction.js';
 
 /**
  * Enumeration to define what parts of the person component render

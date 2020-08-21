@@ -5,5 +5,5 @@
  * -------------------------------------------------------------------------------------------
  */
 
-export * from './IBatch';
-export * from './IGraph';
+export * from './IBatch.js';
+export * from './IGraph.js';

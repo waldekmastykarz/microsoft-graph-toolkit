@@ -6,7 +6,7 @@
  */
 
 import { LitElement, property, PropertyValues } from 'lit-element';
-import { Providers } from '../Providers';
+import { Providers } from '../Providers.js';
 
 /**
  * Defines media query based on component width

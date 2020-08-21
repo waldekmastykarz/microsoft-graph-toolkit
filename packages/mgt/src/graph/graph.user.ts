@@ -7,17 +7,17 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import { User } from '@microsoft/microsoft-graph-types';
-import { CacheItem, CacheSchema, CacheService, CacheStore } from '../utils/Cache';
-import { prepScopes } from '../utils/GraphHelpers';
-import { findPeople } from './graph.people';
+import { CacheItem, CacheSchema, CacheService, CacheStore } from '../utils/Cache.js';
+import { prepScopes } from '../utils/GraphHelpers.js';
+import { findPeople } from './graph.people.js';
 import {
   getPhotoForResource,
   getPhotoFromCache,
   getPhotoInvalidationTime,
   photosCacheEnabled,
   storePhotoInCache
-} from './graph.photos';
-import { IDynamicPerson } from './types';
+} from './graph.photos.js';
+import { IDynamicPerson } from './types.js';
 
 /**
  * Describes the organization of the cache db

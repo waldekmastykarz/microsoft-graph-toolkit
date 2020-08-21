@@ -7,8 +7,8 @@
 
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { MgtBaseComponent } from '../../baseComponent';
-import { styles } from './mgt-arrow-options-css';
+import { MgtBaseComponent } from '../../baseComponent.js';
+import { styles } from './mgt-arrow-options-css.js';
 
 /*
   Ok, the name here deserves a bit of explanation,

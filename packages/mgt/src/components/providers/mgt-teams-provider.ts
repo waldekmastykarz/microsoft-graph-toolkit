@@ -7,9 +7,9 @@
 
 import { customElement, property } from 'lit-element';
 import { Configuration } from 'msal';
-import { Providers } from '../../Providers';
-import { TeamsConfig, TeamsProvider } from '../../providers/TeamsProvider';
-import { MgtBaseProvider } from './baseProvider';
+import { Providers } from '../../Providers.js';
+import { TeamsConfig, TeamsProvider } from '../../providers/TeamsProvider.js';
+import { MgtBaseProvider } from './baseProvider.js';
 
 /**
  * Authentication Library Provider for Microsoft Teams accounts

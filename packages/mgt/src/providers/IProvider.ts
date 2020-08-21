@@ -7,8 +7,8 @@
 
 import { AuthenticationProvider } from '@microsoft/microsoft-graph-client/lib/es/IAuthenticationProvider';
 import { AuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/es/IAuthenticationProviderOptions';
-import { Graph } from '../Graph';
-import { EventDispatcher, EventHandler } from '../utils/EventDispatcher';
+import { Graph } from '../Graph.js';
+import { EventDispatcher, EventHandler } from '../utils/EventDispatcher.js';
 /**
  * Provider Type to be extended for implmenting new providers
  *

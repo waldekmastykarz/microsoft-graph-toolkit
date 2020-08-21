@@ -7,8 +7,8 @@
 
 import { BatchResponse, IBatch, IGraph } from '@microsoft/mgt-element';
 import { BatchRequestContent, MiddlewareOptions } from '@microsoft/microsoft-graph-client';
-import { delay } from '../utils/Utils';
-import { prepScopes } from './GraphHelpers';
+import { delay } from '../utils/Utils.js';
+import { prepScopes } from './GraphHelpers.js';
 
 /**
  * Represents a request to be executed in a batch

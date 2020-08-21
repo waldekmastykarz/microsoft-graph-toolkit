@@ -7,8 +7,8 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
-import { prepScopes } from '../../utils/GraphHelpers';
-import { GraphPageIterator } from '../../utils/GraphPageIterator';
+import { prepScopes } from '../../utils/GraphHelpers.js';
+import { GraphPageIterator } from '../../utils/GraphPageIterator.js';
 
 /**
  * returns Calender events iterator associated with either the logged in user or a specific groupId

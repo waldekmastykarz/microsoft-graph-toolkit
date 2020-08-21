@@ -7,7 +7,7 @@
 
 import { Context, Middleware } from '@microsoft/microsoft-graph-client';
 import { getRequestHeader, setRequestHeader } from '@microsoft/microsoft-graph-client/lib/es/middleware/MiddlewareUtil';
-import { ComponentMiddlewareOptions } from './ComponentMiddlewareOptions';
+import { ComponentMiddlewareOptions } from './ComponentMiddlewareOptions.js';
 
 /**
  * Implements Middleware for the Graph sdk to inject

@@ -6,7 +6,7 @@
  */
 
 import { Client, GraphRequest } from '@microsoft/microsoft-graph-client';
-import { IBatch } from './IBatch';
+import { IBatch } from './IBatch.js';
 
 /**
  * The common functions of the Graph

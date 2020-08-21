@@ -6,9 +6,9 @@
  */
 
 import { customElement, LitElement, property } from 'lit-element';
-import { Providers } from '../../Providers';
-import { ProxyProvider } from '../../providers/ProxyProvider';
-import { MgtBaseProvider } from './baseProvider';
+import { Providers } from '../../Providers.js';
+import { ProxyProvider } from '../../providers/ProxyProvider.js';
+import { MgtBaseProvider } from './baseProvider.js';
 
 /**
  * Authentication component for ProxyProvider

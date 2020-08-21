@@ -7,7 +7,7 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import { OutlookTask, OutlookTaskFolder, OutlookTaskGroup } from '@microsoft/microsoft-graph-types-beta';
-import { prepScopes } from '../../utils/GraphHelpers';
+import { prepScopes } from '../../utils/GraphHelpers.js';
 
 /**
  * async promise, allows developer to add new to-do task

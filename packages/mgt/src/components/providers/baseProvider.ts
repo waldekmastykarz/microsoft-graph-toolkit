@@ -6,8 +6,8 @@
  */
 
 import { property } from 'lit-element';
-import { IProvider } from '../../providers/IProvider';
-import { MgtBaseComponent } from '../baseComponent';
+import { IProvider } from '../../providers/IProvider.js';
+import { MgtBaseComponent } from '../baseComponent.js';
 
 /**
  * Abstract implementation for provider component

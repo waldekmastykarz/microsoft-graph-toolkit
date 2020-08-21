@@ -5,6 +5,6 @@
  * -------------------------------------------------------------------------------------------
  */
 
-export * from './mgt-msal-provider';
-export * from './mgt-teams-provider';
-export * from './mgt-proxy-provider';
+export * from './mgt-msal-provider.js';
+export * from './mgt-teams-provider.js';
+export * from './mgt-proxy-provider.js';

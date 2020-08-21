@@ -7,9 +7,9 @@
 
 import { IGraph } from '@microsoft/mgt-element';
 import { Presence } from '@microsoft/microsoft-graph-types-beta';
-import { BetaGraph } from '../BetaGraph';
-import { prepScopes } from '../utils/GraphHelpers';
-import { IDynamicPerson } from './types';
+import { BetaGraph } from '../BetaGraph.js';
+import { prepScopes } from '../utils/GraphHelpers.js';
+import { IDynamicPerson } from './types.js';
 
 /**
  * async promise, allows developer to get my presense

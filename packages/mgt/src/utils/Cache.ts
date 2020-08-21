@@ -6,8 +6,8 @@
  */
 
 import { openDB } from 'idb';
-import { Providers } from '../Providers';
-import { ProviderState } from '../providers/IProvider';
+import { Providers } from '../Providers.js';
+import { ProviderState } from '../providers/IProvider.js';
 
 /**
  * Holds the cache options for cache store

@@ -8,7 +8,7 @@
 import { IGraph } from '@microsoft/mgt-element';
 import { PlannerAssignments } from '@microsoft/microsoft-graph-types';
 import { OutlookTask, OutlookTaskFolder, OutlookTaskGroup } from '@microsoft/microsoft-graph-types-beta';
-import { BetaGraph } from '../../BetaGraph';
+import { BetaGraph } from '../../BetaGraph.js';
 import {
   addPlannerTask,
   assignPeopleToPlannerTask,
@@ -20,7 +20,7 @@ import {
   removePlannerTask,
   setPlannerTaskComplete,
   setPlannerTaskIncomplete
-} from './mgt-tasks.graph.planner';
+} from './mgt-tasks.graph.planner.js';
 import {
   addTodoTask,
   getAllMyTodoGroups,
@@ -30,7 +30,7 @@ import {
   removeTodoTask,
   setTodoTaskComplete,
   setTodoTaskIncomplete
-} from './mgt-tasks.graph.todo';
+} from './mgt-tasks.graph.todo.js';
 
 /**
  * Itask

@@ -6,10 +6,10 @@
  */
 
 import { html, PropertyValues } from 'lit-element';
-import { TemplateContext } from '../graph/types';
-import { equals } from '../utils/Utils';
-import { MgtBaseComponent } from './baseComponent';
-import { TemplateHelper } from './templateHelper';
+import { TemplateContext } from '../graph/types.js';
+import { equals } from '../utils/Utils.js';
+import { MgtBaseComponent } from './baseComponent.js';
+import { TemplateHelper } from './templateHelper.js';
 
 /**
  * Lookup for rendered component templates and contexts by slot name.

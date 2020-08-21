@@ -10,22 +10,22 @@ import { Contact, OutlookTask, OutlookTaskFolder } from '@microsoft/microsoft-gr
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { Providers } from '../../Providers';
-import { ProviderState } from '../../providers/IProvider';
-import { getShortDateString } from '../../utils/Utils';
-import { MgtPeoplePicker } from '../mgt-people-picker/mgt-people-picker';
-import { MgtTemplatedComponent } from '../templatedComponent';
-import { PersonCardInteraction } from './../PersonCardInteraction';
-import { styles } from './mgt-tasks-css';
-import { ITask, ITaskFolder, ITaskGroup, ITaskSource, PlannerTaskSource, TodoTaskSource } from './task-sources';
+import { Providers } from '../../Providers.js';
+import { ProviderState } from '../../providers/IProvider.js';
+import { getShortDateString } from '../../utils/Utils.js';
+import { MgtPeoplePicker } from '../mgt-people-picker/mgt-people-picker.js';
+import { MgtTemplatedComponent } from '../templatedComponent.js';
+import { PersonCardInteraction } from './../PersonCardInteraction.js';
+import { styles } from './mgt-tasks-css.js';
+import { ITask, ITaskFolder, ITaskGroup, ITaskSource, PlannerTaskSource, TodoTaskSource } from './task-sources.js';
 
-import { getMe } from '../../graph/graph.user';
-import { ComponentMediaQuery } from '../baseComponent';
-import { MgtPeople } from '../mgt-people/mgt-people';
-import '../mgt-person/mgt-person';
-import '../sub-components/mgt-arrow-options/mgt-arrow-options';
-import '../sub-components/mgt-dot-options/mgt-dot-options';
-import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout';
+import { getMe } from '../../graph/graph.user.js';
+import { ComponentMediaQuery } from '../baseComponent.js';
+import { MgtPeople } from '../mgt-people/mgt-people.js';
+import '../mgt-person/mgt-person.js';
+import '../sub-components/mgt-arrow-options/mgt-arrow-options.js';
+import '../sub-components/mgt-dot-options/mgt-dot-options.js';
+import { MgtFlyout } from '../sub-components/mgt-flyout/mgt-flyout.js';
 
 /**
  * Defines how a person card is shown when a user interacts with
