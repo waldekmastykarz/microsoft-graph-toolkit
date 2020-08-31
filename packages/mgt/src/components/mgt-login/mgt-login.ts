@@ -18,6 +18,9 @@ import { getUserWithPhoto } from '../../graph/graph.user';
 import '../../styles/fabric-icon-font';
 import '../mgt-person/mgt-person';
 import { PersonViewType } from '../mgt-person/mgt-person';
+import { LocalizationHelper } from '../localizationHelper';
+import { SimpleProvider } from '../../providers/providers';
+export { LocalizationHelper } from '../localizationHelper';
 
 /**
  * Web component button and flyout control to facilitate Microsoft identity platform authentication
@@ -102,6 +105,11 @@ export class MgtLogin extends MgtTemplatedComponent {
     this.addEventListener('click', e => e.stopPropagation());
   }
 
+  private updateDirection() {
+    this.classList.add('rtl');
+    console.log('rtl added');
+  }
+
   /**
    * Initiate login
    *
@@ -152,6 +160,10 @@ export class MgtLogin extends MgtTemplatedComponent {
    * trigger the element to update.
    */
   protected render() {
+    LocalizationHelper.intialize('mgt-login');
+    if (LocalizationHelper.direction == 'rtl') {
+      this.classList.add('rtl');
+    }
     return html`
       <div class="root">
         <div>
@@ -280,7 +292,7 @@ export class MgtLogin extends MgtTemplatedComponent {
         <ul>
           <li>
             <button class="popup-command" @click=${this.logout} aria-label="Sign Out">
-              Sign Out
+              ${LocalizationHelper.localize('Sign Out')}
             </button>
           </li>
         </ul>
