@@ -69,6 +69,7 @@ const contactStore: string = 'contacts';
  * @returns {Promise<string>}
  */
 export async function getPhotoForResource(graph: IGraph, resource: string, scopes: string[]): Promise<CachePhoto> {
+  console.log('yoyoy');
   try {
     const response = (await graph
       .api(`${resource}/photo/$value`)
@@ -76,8 +77,8 @@ export async function getPhotoForResource(graph: IGraph, resource: string, scope
       .middlewareOptions(prepScopes(...scopes))
       .get()) as Response;
 
-    if (!response.ok) {
-      return null;
+    if (response.status === 404) {
+      return { eTag: null, photo: null };
     }
     const eTag = response.headers.get('eTag');
     const blob = await blobToBase64(await response.blob());
