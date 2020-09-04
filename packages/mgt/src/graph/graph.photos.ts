@@ -69,7 +69,6 @@ const contactStore: string = 'contacts';
  * @returns {Promise<string>}
  */
 export async function getPhotoForResource(graph: IGraph, resource: string, scopes: string[]): Promise<CachePhoto> {
-  console.log('yoyoy');
   try {
     const response = (await graph
       .api(`${resource}/photo/$value`)
