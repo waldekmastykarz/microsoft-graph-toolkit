@@ -603,6 +603,62 @@ export class MgtPersonCard extends MgtTemplatedComponent {
   }
 
   /**
+   * Checks if minimum criteria are met for showing the additional details section.
+   *
+   * @readonly
+   * @protected
+   * @memberof MgtPersonCard
+   */
+  protected get showAdditionalDetailsSecton() {
+    return this.hasTemplate('additional-details') && this.hasTemplate('additional-details-icon');
+  }
+
+  /**
+   * Render the additional details template, if available.
+   * Uses the compact mode if available, or falls back on the additional-details template.
+   *
+   * @protected
+   * @param {boolean} [compact=false]
+   * @returns {TemplateResult}
+   * @memberof MgtPersonCard
+   */
+  protected renderAdditionalDetails(compact: boolean = false): TemplateResult {
+    const context = {
+      personDetails: this._personDetails,
+      personImage: this.personImage
+    };
+
+    if (compact && this.hasTemplate('additional-details-compact')) {
+      // Show the compact section
+      return this.renderTemplate('additional-details-compact', context);
+    } else if (this.hasTemplate('additional-details')) {
+      // Fallback on the non-compact additional details
+      return this.renderTemplate('additional-details', context);
+    }
+
+    return null;
+  }
+
+  /**
+   * Render the icon for the additional details section
+   *
+   * @protected
+   * @returns {TemplateResult}
+   * @memberof MgtPersonCard
+   */
+  protected renderAdditionalDetailsIcon(): TemplateResult {
+    if (!this.showAdditionalDetailsSecton) {
+      return;
+    }
+
+    const context = {
+      personDetails: this._personDetails,
+      personImage: this.personImage
+    };
+    return this.renderTemplate('additional-details-icon', context);
+  }
+
+  /**
    * load state into the component
    *
    * @protected
