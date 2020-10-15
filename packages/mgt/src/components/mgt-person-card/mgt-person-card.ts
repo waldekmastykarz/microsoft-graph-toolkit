@@ -181,13 +181,15 @@ export class MgtPersonCard extends MgtTemplatedComponent {
 
   private _history: IDynamicPerson[];
   private _chatInput: string;
-  private _currentSection: BasePersonCardSection;
+  //private _currentSection: BasePersonCardSection;
   private _personDetails: IDynamicPerson;
+
+  private _currentSectionIndex: number;
 
   constructor() {
     super();
     this._chatInput = '';
-    this._currentSection = null;
+    this._currentSectionIndex = null;
     this._history = [];
     this.sections = [
       new MgtPersonCardContact(),
@@ -251,7 +253,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
     });
 
     this.personDetails = person;
-    this._currentSection = null;
+    this._currentSectionIndex = null;
   }
 
   /**
@@ -518,7 +520,7 @@ export class MgtPersonCard extends MgtTemplatedComponent {
    * @memberof MgtPersonCard
    */
   protected renderSectionNavigation(): TemplateResult {
-    const currentSectionIndex = this._currentSection ? this.sections.indexOf(this._currentSection) : -1;
+    const currentSectionIndex = this._currentSectionIndex;
 
     const navIcons = this.sections.map((section, i, a) => {
       const classes = classMap({
@@ -531,6 +533,13 @@ export class MgtPersonCard extends MgtTemplatedComponent {
         </button>
       `;
     });
+
+    // Show the additinal details section if necessary.
+    if (this.showAdditionalDetailsSecton) {
+      const additionalDetailsIcon = this.renderAdditionalDetailsIcon();
+      const additionalDetailsIndex = 0;
+      navIcons.splice(additionalDetailsIndex, 0, additionalDetailsIcon);
+    }
 
     const overviewClasses = classMap({
       active: currentSectionIndex === -1,
@@ -593,12 +602,13 @@ export class MgtPersonCard extends MgtTemplatedComponent {
    * @memberof MgtPersonCard
    */
   protected renderCurrentSection(): TemplateResult {
-    if (!this._currentSection) {
+    if (!this._currentSectionIndex) {
       return this.renderOverviewSection();
     }
 
+    const currentSection = this.sections[0];
     return html`
-      ${this._currentSection.asFullView()}
+      ${currentSection.asFullView()}
     `;
   }
 
