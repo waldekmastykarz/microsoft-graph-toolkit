@@ -525,7 +525,8 @@ export class MgtPersonCard extends MgtTemplatedComponent {
     const navIcons = this.sections.map((section, i, a) => {
       const classes = classMap({
         active: i === currentSectionIndex,
-        'section-nav__icon': true
+        'section-nav__icon': true,
+        hidden: section.hasData
       });
       return html`
         <button class=${classes} @click=${() => this.updateCurrentSection(section)}>

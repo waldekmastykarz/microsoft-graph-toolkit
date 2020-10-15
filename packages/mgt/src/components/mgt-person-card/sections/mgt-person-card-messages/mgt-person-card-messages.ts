@@ -46,13 +46,30 @@ export class MgtPersonCardMessages extends BasePersonCardSection {
   private _messages: IMessage[];
 
   /**
+   * Determine if the component have valid data for display
+   *
+   * @readonly
+   * @protected
+   * @type {boolean}
+   * @memberof MgtPersonCardOrganization
+   */
+  public get hasData(): boolean {
+    return this._messages && this._messages.length > -1;
+  }
+
+  constructor() {
+    super();
+    this._messages = null;
+  }
+
+  /**
    * Reset any state in the section
    *
    * @protected
    * @memberof MgtPersonCardMessages
    */
   public clearState(): void {
-    this._messages = [];
+    this._messages = null;
   }
 
   /**
@@ -76,7 +93,7 @@ export class MgtPersonCardMessages extends BasePersonCardSection {
 
     if (this.isLoadingState) {
       contentTemplate = this.renderLoading();
-    } else if (!this._messages || !this._messages.length) {
+    } else if (!this.hasData) {
       contentTemplate = this.renderNoData();
     } else {
       const messageTemplates = this._messages
@@ -106,7 +123,7 @@ export class MgtPersonCardMessages extends BasePersonCardSection {
 
     if (this.isLoadingState) {
       contentTemplate = this.renderLoading();
-    } else if (!this._messages || !this._messages.length) {
+    } else if (!this.hasData) {
       contentTemplate = this.renderNoData();
     } else {
       contentTemplate = html`

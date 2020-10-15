@@ -68,6 +68,18 @@ export class MgtPersonCardProfile extends BasePersonCardSection {
   private _professionalInterests: IPersonInterest[];
   private _birthdayAnniversary: IPersonAnniversary;
 
+  /**
+   * Determine if the component have valid data for display
+   *
+   * @readonly
+   * @protected
+   * @type {boolean}
+   * @memberof MgtPersonCardProfile
+   */
+  public get hasData(): boolean {
+    return !!this._profile;
+  }
+
   constructor() {
     super();
 

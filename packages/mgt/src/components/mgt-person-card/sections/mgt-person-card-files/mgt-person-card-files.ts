@@ -47,6 +47,23 @@ export class MgtPersonCardFiles extends BasePersonCardSection {
   private _files: IFile[];
 
   /**
+   * Determine if the component have valid data for display
+   *
+   * @readonly
+   * @protected
+   * @type {boolean}
+   * @memberof MgtPersonCardOrganization
+   */
+  public get hasData(): boolean {
+    return this._files && this._files.length > -1;
+  }
+
+  constructor() {
+    super();
+    this._files = null;
+  }
+
+  /**
    * Reset any state in the section
    *
    * @protected
@@ -77,7 +94,7 @@ export class MgtPersonCardFiles extends BasePersonCardSection {
 
     if (this.isLoadingState) {
       contentTemplate = this.renderLoading();
-    } else if (!this._files || !this._files.length) {
+    } else if (!this.hasData) {
       contentTemplate = this.renderNoData();
     } else {
       contentTemplate = html`
@@ -104,7 +121,7 @@ export class MgtPersonCardFiles extends BasePersonCardSection {
 
     if (this.isLoadingState) {
       contentTemplate = this.renderLoading();
-    } else if (!this._files || !this._files.length) {
+    } else if (!this.hasData) {
       contentTemplate = this.renderNoData();
     } else {
       contentTemplate = html`

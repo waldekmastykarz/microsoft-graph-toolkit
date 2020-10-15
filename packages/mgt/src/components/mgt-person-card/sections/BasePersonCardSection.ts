@@ -71,6 +71,16 @@ export abstract class BasePersonCardSection extends MgtTemplatedComponent {
   }
 
   /**
+   * Determine if the component have valid data for display
+   *
+   * @readonly
+   * @abstract
+   * @type {boolean}
+   * @memberof BasePersonCardSection
+   */
+  public abstract get hasData(): boolean;
+
+  /**
    * Render the icon for display in the navigation ribbon.
    *
    * @protected

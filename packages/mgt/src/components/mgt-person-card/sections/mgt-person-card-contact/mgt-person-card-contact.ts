@@ -121,6 +121,18 @@ export class MgtPersonCardContact extends BasePersonCardSection {
   // tslint:enable: object-literal-sort-keys
 
   /**
+   * Determine if the component have valid data for display
+   *
+   * @readonly
+   * @protected
+   * @type {boolean}
+   * @memberof MgtPersonCardOrganization
+   */
+  public get hasData(): boolean {
+    return false; //!!this._contactParts;
+  }
+
+  /**
    * Render the icon for display in the navigation ribbon.
    *
    * @returns {TemplateResult}

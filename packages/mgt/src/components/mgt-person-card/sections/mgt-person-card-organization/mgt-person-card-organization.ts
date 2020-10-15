@@ -40,6 +40,18 @@ export class MgtPersonCardOrganization extends BasePersonCardSection {
     return 'Reports to';
   }
 
+  /**
+   * Determine if the component have valid data for display
+   *
+   * @readonly
+   * @protected
+   * @type {boolean}
+   * @memberof MgtPersonCardOrganization
+   */
+  public get hasData(): boolean {
+    return (this._managers && this._managers.length > -1) || (this._coworkers && this._coworkers.length > -1);
+  }
+
   private _managers: IOrgMember[];
   private _coworkers: IOrgMember[];
 
@@ -75,7 +87,7 @@ export class MgtPersonCardOrganization extends BasePersonCardSection {
 
     if (this.isLoadingState) {
       contentTemplate = this.renderLoading();
-    } else if (!this._managers || !this._managers.length) {
+    } else if (!this.hasData) {
       contentTemplate = this.renderNoData();
     } else {
       const reportsTo = this._managers[0];
@@ -101,7 +113,7 @@ export class MgtPersonCardOrganization extends BasePersonCardSection {
 
     if (this.isLoadingState) {
       contentTemplate = this.renderLoading();
-    } else if ((!this._managers || !this._managers.length) && (!this._coworkers || !this._coworkers.length)) {
+    } else if (!this.hasData) {
       contentTemplate = this.renderNoData();
     } else {
       const managers = new Array(...this._managers);

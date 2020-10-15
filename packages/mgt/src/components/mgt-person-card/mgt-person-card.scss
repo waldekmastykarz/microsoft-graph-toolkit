@@ -304,6 +304,10 @@ $person-card-background-color: var(--person-card-background-color, #ffffff);
       flex-direction: column;
       position: relative;
 
+      &.hidden {
+        display: none;
+      }
+
       &:not(:last-child) {
         border-bottom: 1px solid #eaeaea;
       }
