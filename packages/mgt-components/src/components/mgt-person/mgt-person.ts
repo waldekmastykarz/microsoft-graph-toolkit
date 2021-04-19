@@ -607,15 +607,13 @@ export class MgtPerson extends MgtTemplatedComponent {
 
       return html`
         <span class="initials-text" aria-label="${initials}">
-          ${
-            initials && initials.length
-              ? html`
+          ${initials && initials.length
+            ? html`
                 ${initials}
               `
-              : html`
+            : html`
                 <i class="ms-Icon ms-Icon--Contact contact-icon"></i>
-              `
-          }
+              `}
         </span>
       `;
     }
