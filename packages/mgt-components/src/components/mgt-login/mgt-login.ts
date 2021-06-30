@@ -96,6 +96,16 @@ export class MgtLogin extends MgtTemplatedComponent {
   }
 
   /**
+   * Get the scopes required for login based on its current configuration
+   *
+   * @return {*}  {string[]}
+   * @memberof MgtLogin
+   */
+  public get effectiveScopes(): string[] {
+    return [...new Set(['user.read'])];
+  }
+
+  /**
    * determines if login menu popup should be showing
    * @type {boolean}
    */
@@ -228,12 +238,9 @@ export class MgtLogin extends MgtTemplatedComponent {
    */
   protected renderFlyout() {
     return html`
-      <mgt-flyout
-        class="flyout"
-        light-dismiss
-        @opened=${() => (this._isFlyoutOpen = true)}
+      <mgt-flyout class="flyout" light-dismiss @opened=${() => (this._isFlyoutOpen = true)}
         @closed=${() => (this._isFlyoutOpen = false)}
-      >
+        >
         <div slot="flyout">
           ${this.renderFlyoutContent()}
         </div>

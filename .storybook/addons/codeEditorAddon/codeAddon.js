@@ -4,10 +4,10 @@ import { EditorElement } from './editor';
 const mgtScriptName = './mgt.storybook.js';
 
 // function is used for dragging and moving
-const setupEditorResize = (first, separator, last, dragComplete) => {
+const setupEditorResize = (first, separator, last, dragComplete, isVertical) => {
   var md; // remember mouse down info
 
-  separator.addEventListener('mousedown', (e) => {
+  separator.addEventListener('mousedown', e => {
     md = {
       e,
       offsetLeft: separator.offsetLeft,
@@ -37,10 +37,10 @@ const setupEditorResize = (first, separator, last, dragComplete) => {
     document.removeEventListener('mouseup', onMouseUp);
   };
 
-  const onMouseMove = (e) => {
+  const onMouseMove = e => {
     var delta = { x: e.clientX - md.e.x, y: e.clientY - md.e.y };
 
-    if (window.innerWidth > 800) {
+    if (window.innerWidth > 800 && !isVertical) {
       // Horizontal
       // prevent negative-sized elements
       delta.x = Math.min(Math.max(delta.x, -md.firstWidth + 200), md.lastWidth - 200);
@@ -55,7 +55,7 @@ const setupEditorResize = (first, separator, last, dragComplete) => {
       first.style.height = md.firstHeight + delta.y - 0.5 + 'px';
       last.style.height = md.lastHeight - delta.y - 0.5 + 'px';
     }
-  }
+  };
 };
 
 let scriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gm;
@@ -136,6 +136,30 @@ export const withCodeEditor = makeDecorator({
         doc.open();
         doc.write(docContent);
         doc.close();
+
+        const scopes = [];
+        const getEffectiveScopesForElements = allElements => {
+          const mgtElements = allElements.filter(e => e.nodeName.indexOf('MGT-') === 0);
+
+          mgtElements.forEach(element => {
+            const effectiveScopes = element.effectiveScopes;
+            if (effectiveScopes) {
+              scopes.push(...effectiveScopes);
+            }
+            element.addEventListener('templateRendered', e => {
+              getEffectiveScopesForElements(Array.from(e.target.querySelectorAll('*')));
+            });
+
+            scopes.sort();
+            document.querySelector('.story-mgt-permissions ul').innerHTML = Array.from(new Set([...scopes]))
+              .map(s => `<li>${s}</li>`)
+              .join('');
+          });
+        };
+
+        doc.addEventListener('DOMContentLoaded', () => {
+          getEffectiveScopesForElements(Array.from(doc.querySelectorAll('*')));
+        });
       });
 
       storyElement.className = 'story-mgt-preview';
@@ -145,22 +169,40 @@ export const withCodeEditor = makeDecorator({
 
     const separator = document.createElement('div');
 
-    setupEditorResize(storyElementWrapper, separator, editor, () => editor.layout());
+    const editorPanel = document.createElement('div');
+    editorPanel.className = 'story-mgt-editor';
+    const editorControlWrapper = document.createElement('div');
+    editorControlWrapper.className = 'story-mgt-editor-wrapper';
+    const permissionsElement = document.createElement('div');
+    permissionsElement.className = 'story-mgt-permissions';
+    permissionsElement.innerHTML = '<h3>Required permissions</h3><ul></ul>';
+    const permissionsSeparator = document.createElement('div');
+    permissionsSeparator.className = 'story-mgt-separator vertical';
+
+    setupEditorResize(storyElementWrapper, separator, editorPanel, () => editor.layout());
+    setupEditorResize(editorControlWrapper, permissionsSeparator, permissionsElement, () => editor.layout(), true);
 
     root.className = 'story-mgt-root';
     storyElementWrapper.className = 'story-mgt-preview-wrapper';
     separator.className = 'story-mgt-separator';
-    editor.className = 'story-mgt-editor';
+    editorControlWrapper.appendChild(editor);
+    editorPanel.appendChild(editorControlWrapper);
+    editorPanel.appendChild(permissionsSeparator);
+    editorPanel.appendChild(permissionsElement);
 
     root.appendChild(storyElementWrapper);
     root.appendChild(separator);
-    root.appendChild(editor);
+    root.appendChild(editorPanel);
 
     window.addEventListener('resize', () => {
       storyElementWrapper.style.height = null;
       storyElementWrapper.style.width = null;
-      editor.style.height = null;
-      editor.style.width = null;
+      editorPanel.style.height = null;
+      editorPanel.style.width = null;
+      editorControlWrapper.style.height = null;
+      editorControlWrapper.style.width = null;
+      permissionsElement.style.height = null;
+      permissionsElement.style.width = null;
     });
 
     return root;
